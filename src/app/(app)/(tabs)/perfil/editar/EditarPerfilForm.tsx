@@ -27,14 +27,12 @@ export default function EditarPerfilForm({
     <form action={action} className="flex flex-col gap-3">
       {state.error ? <Alert>{state.error}</Alert> : null}
 
-      <div className="flex gap-3">
-        <Field label={t("firstName")} htmlFor="nombre">
-          <TextInput id="nombre" name="nombre" defaultValue={nombre} autoComplete="given-name" required />
-        </Field>
-        <Field label={t("lastName")} htmlFor="apellidos">
-          <TextInput id="apellidos" name="apellidos" defaultValue={apellidos} autoComplete="family-name" required />
-        </Field>
-      </div>
+      <Field label={t("firstName")} htmlFor="nombre">
+        <TextInput id="nombre" name="nombre" defaultValue={nombre} autoComplete="given-name" required />
+      </Field>
+      <Field label={t("lastName")} htmlFor="apellidos">
+        <TextInput id="apellidos" name="apellidos" defaultValue={apellidos} autoComplete="family-name" required />
+      </Field>
 
       <Field label={t("phone")} htmlFor="telefono" hint={t("phoneHint")}>
         <TextInput id="telefono" name="telefono" defaultValue={telefono} type="tel" autoComplete="tel" inputMode="tel" />

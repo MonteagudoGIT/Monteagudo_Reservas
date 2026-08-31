@@ -206,7 +206,8 @@
     "balanceHint": "Only created by cancellations. Used when booking.",
     "editData": "Edit details",
     "changePassword": "Change password",
-    "logout": "Sign out"
+    "logout": "Sign out",
+    "suggestions": "Suggestion box"
   },
   "language": {
     "label": "Language",
@@ -250,5 +251,18 @@
     "err_noPermiso": "You cannot cancel this booking.",
     "err_estado": "This booking can no longer be cancelled.",
     "err_generic": "Could not cancel."
+  },
+  "sugerencias": {
+    "title": "Suggestion box",
+    "subtitle": "Write a suggestion and it will reach the administrator.",
+    "placeholder": "Tell us your suggestion…",
+    "send": "Send",
+    "sent": "Suggestion sent. Thank you.",
+    "required": "Write something before sending.",
+    "mine": "Your suggestions",
+    "empty": "You haven't sent any yet.",
+    "st_nueva": "Sent",
+    "st_leida": "Read",
+    "st_gestionada": "Handled"
   }
 }

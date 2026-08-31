@@ -78,6 +78,17 @@ export async function setEstadoUsuario(id: string, estado: "activa" | "desactiva
   return {};
 }
 
+export async function setEstadoSugerencia(
+  id: string,
+  estado: "nueva" | "leida" | "gestionada",
+): Promise<R> {
+  const s = await createClient();
+  const { error } = await s.from("sugerencias").update({ estado }).eq("id", id);
+  if (error) return { error: "No se ha podido actualizar." };
+  refrescoAdmin();
+  return {};
+}
+
 export async function borrarMantenimiento(id: string): Promise<R> {
   const s = await createClient();
   const { error } = await s.from("bloqueos_mantenimiento").delete().eq("id", id);

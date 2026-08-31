@@ -76,6 +76,16 @@ export default async function Page() {
         </Link>
       </div>
 
+      <Link
+        href="/sugerencias"
+        className="flex items-center justify-between rounded-2xl border border-line bg-surface px-4 py-3.5 text-sm font-semibold"
+      >
+        {t("suggestions")}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="1.8">
+          <path d="M9 5l7 7-7 7" />
+        </svg>
+      </Link>
+
       <form action={logoutAction}>
         <button className="h-11 w-full rounded-xl border border-line-strong bg-surface font-semibold text-danger">
           {t("logout")}

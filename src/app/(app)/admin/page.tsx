@@ -6,12 +6,13 @@ export default async function AdminPanel() {
   const supabase = await createClient();
   const hoy = hoyMadridISO();
 
-  const [tx, apr, hoyRes, altas, intentos] = await Promise.all([
+  const [tx, apr, hoyRes, altas, intentos, sug] = await Promise.all([
     supabase.from("reservas").select("id", { count: "exact", head: true }).eq("estado", "retenida").eq("metodo_pago", "transferencia"),
     supabase.from("reservas").select("id", { count: "exact", head: true }).eq("aprobacion", "pendiente"),
     supabase.from("reservas").select("id", { count: "exact", head: true }).eq("fecha", hoy).in("estado", ["retenida", "confirmada"]),
     supabase.from("perfiles").select("id", { count: "exact", head: true }).gte("creado_en", new Date(Date.now() - 7 * 864e5).toISOString()),
     supabase.from("intentos_bloqueados").select("id", { count: "exact", head: true }).gte("creado_en", new Date(Date.now() - 30 * 864e5).toISOString()),
+    supabase.from("sugerencias").select("id", { count: "exact", head: true }).eq("estado", "nueva"),
   ]);
 
   const kpis = [
@@ -20,6 +21,7 @@ export default async function AdminPanel() {
     { label: "Reservas hoy", n: hoyRes.count ?? 0, href: "/admin/reservas" },
     { label: "Altas (7 días)", n: altas.count ?? 0, href: "/admin/usuarios" },
     { label: "Intentos con impago", n: intentos.count ?? 0, href: "/admin/viviendas", alerta: (intentos.count ?? 0) > 0 },
+    { label: "Sugerencias nuevas", n: sug.count ?? 0, href: "/admin/sugerencias", alerta: (sug.count ?? 0) > 0 },
   ];
 
   const secciones = [
@@ -32,6 +34,7 @@ export default async function AdminPanel() {
     { href: "/admin/usuarios", t: "Usuarios", d: "Activar y desactivar" },
     { href: "/admin/mantenimiento", t: "Mantenimiento", d: "Cerrar tramos" },
     { href: "/admin/avisos", t: "Avisos", d: "Comunicados a los vecinos" },
+    { href: "/admin/sugerencias", t: "Buzón de sugerencias", d: "Lo que dicen los vecinos" },
     { href: "/admin/calendario", t: "Calendario global", d: "Ver toda la ocupación" },
   ];
 

@@ -206,7 +206,8 @@
     "balanceHint": "Solo se genera por cancelaciones. Se usa al reservar.",
     "editData": "Editar datos",
     "changePassword": "Cambiar contraseña",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "suggestions": "Buzón de sugerencias"
   },
   "language": {
     "label": "Idioma",
@@ -250,5 +251,18 @@
     "err_noPermiso": "No puedes cancelar esta reserva.",
     "err_estado": "Esta reserva ya no se puede cancelar.",
     "err_generic": "No se ha podido cancelar."
+  },
+  "sugerencias": {
+    "title": "Buzón de sugerencias",
+    "subtitle": "Escribe una sugerencia y le llegará al administrador.",
+    "placeholder": "Cuéntanos tu sugerencia…",
+    "send": "Enviar",
+    "sent": "Sugerencia enviada. Gracias.",
+    "required": "Escribe algo antes de enviar.",
+    "mine": "Tus sugerencias",
+    "empty": "Aún no has enviado ninguna.",
+    "st_nueva": "Enviada",
+    "st_leida": "Leída",
+    "st_gestionada": "Gestionada"
   }
 }
