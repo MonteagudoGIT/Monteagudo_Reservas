@@ -32,7 +32,7 @@ export function EstadoPill({
     label = "Realizada";
   }
   return (
-    <span className={"rounded-full px-2.5 py-1 text-[11px] font-semibold " + cls}>
+    <span className={"rounded-full px-2.5 py-1 text-xs font-semibold " + cls}>
       {label}
     </span>
   );

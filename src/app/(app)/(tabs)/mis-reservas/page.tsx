@@ -73,7 +73,7 @@ export default async function Page() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2.5">
-      <div className="text-[11px] font-semibold uppercase tracking-[.09em] text-ink-3">
+      <div className="text-xs font-semibold uppercase tracking-[.09em] text-ink-3">
         {title}
       </div>
       {children}

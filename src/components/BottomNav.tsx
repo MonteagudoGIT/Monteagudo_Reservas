@@ -42,7 +42,7 @@ export default function BottomNav() {
 
       <Link
         href="/reservar"
-        className="-mt-5 flex flex-col items-center gap-1.5 text-[11px] font-semibold text-accent-ink"
+        className="-mt-5 flex flex-col items-center gap-1.5 text-xs font-semibold text-accent-ink"
       >
         <span className="flex size-[52px] items-center justify-center rounded-full bg-accent text-white shadow-[0_8px_18px_-6px_rgba(71,115,88,.55)]">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
@@ -73,7 +73,7 @@ function Tab({
     <Link
       href={href}
       className={
-        "flex flex-col items-center gap-1 text-[11px] " +
+        "flex flex-col items-center gap-1 text-xs " +
         (on ? "font-semibold text-ink" : "text-ink-3")
       }
     >

@@ -51,10 +51,10 @@ export default async function Page() {
 
       <div className="flex items-center justify-between rounded-2xl border border-accent/25 bg-accent-soft px-4 py-3">
         <div>
-          <div className="text-[11px] font-semibold uppercase tracking-[.09em] text-accent-ink">
+          <div className="text-xs font-semibold uppercase tracking-[.09em] text-accent-ink">
             {t("balance")}
           </div>
-          <div className="text-[11px] text-ink-2">{t("balanceHint")}</div>
+          <div className="text-xs text-ink-2">{t("balanceHint")}</div>
         </div>
         <div className="font-mono text-xl font-medium">{formatoEuros(Number(saldo ?? 0))}</div>
       </div>
@@ -82,7 +82,7 @@ export default async function Page() {
 
       {(movimientos ?? []).length > 0 && (
         <>
-        <div className="pt-1 text-[11px] font-semibold uppercase tracking-[.09em] text-ink-3">
+        <div className="pt-1 text-xs font-semibold uppercase tracking-[.09em] text-ink-3">
           Movimientos del saldo
         </div>
         <div className="rounded-2xl border border-line bg-surface px-4">

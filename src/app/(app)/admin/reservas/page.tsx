@@ -52,7 +52,7 @@ export default async function Page({
         <h1 className="text-xl font-semibold">Reservas</h1>
         <Link
           href="/admin/reservas/nueva"
-          className="rounded-lg bg-accent px-3 py-1.5 text-[13px] font-semibold text-white"
+          className="rounded-lg bg-accent px-3 py-1.5 text-sm font-semibold text-white"
         >
           + Nueva
         </Link>
@@ -64,7 +64,7 @@ export default async function Page({
             key={x.k}
             href={`/admin/reservas?f=${x.k}`}
             className={
-              "rounded-lg px-3 py-1.5 text-[13px] font-semibold " +
+              "rounded-lg px-3 py-1.5 text-sm font-semibold " +
               (filtro === x.k ? "bg-ink text-surface" : "border border-line bg-surface text-ink-2")
             }
           >

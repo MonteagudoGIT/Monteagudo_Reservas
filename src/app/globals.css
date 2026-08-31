@@ -63,6 +63,13 @@
 
 html {
   height: 100%;
+  /* Base más grande: la app se lee cómoda en móvil (todo el texto es relativo). */
+  font-size: 17px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
 }
 
 body {

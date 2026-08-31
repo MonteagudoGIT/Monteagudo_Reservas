@@ -27,7 +27,7 @@ export default async function Page() {
               <span className="font-semibold">{a.titulo}</span>
               <span
                 className={
-                  "shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold " +
+                  "shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold " +
                   (a.publicado ? "bg-accent-soft text-accent-ink" : "bg-surface-2 text-ink-3")
                 }
               >

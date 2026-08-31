@@ -52,7 +52,7 @@ export function AccionBtn({
             else router.refresh();
           });
         }}
-        className={"inline-flex h-9 items-center rounded-lg px-3 text-[13px] font-semibold disabled:opacity-50 " + cls}
+        className={"inline-flex h-9 items-center rounded-lg px-3 text-sm font-semibold disabled:opacity-50 " + cls}
       >
         {pending ? "…" : children}
       </button>

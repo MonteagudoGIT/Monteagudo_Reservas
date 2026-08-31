@@ -101,7 +101,7 @@ export default function ReservarWizard({
             </svg>
           </button>
           <div>
-            <div className="text-[11px] font-semibold uppercase tracking-[.08em] text-ink-3">Reservar</div>
+            <div className="text-xs font-semibold uppercase tracking-[.08em] text-ink-3">Reservar</div>
             <div className="font-semibold">
               Paso {paso} de 3 · {["Espacio", "Día y hora", "Pago"][paso - 1]}
             </div>
@@ -165,13 +165,13 @@ export default function ReservarWizard({
                       (sel ? "border-2 border-accent bg-accent-soft" : "border-line bg-surface")
                     }
                   >
-                    <span className="text-[10px] capitalize text-ink-3">{i === 0 ? "hoy" : dow}</span>
+                    <span className="text-[0.72rem] capitalize text-ink-3">{i === 0 ? "hoy" : dow}</span>
                     <span className="text-sm font-semibold">{dia}</span>
                   </button>
                 );
               })}
             </div>
-            <div className="mt-1.5 text-[11px] font-semibold uppercase tracking-[.06em] text-ink-3">
+            <div className="mt-1.5 text-xs font-semibold uppercase tracking-[.06em] text-ink-3">
               <span className="capitalize">{nombreDiaLargo(fecha)}</span>
             </div>
           </div>
@@ -193,7 +193,7 @@ export default function ReservarWizard({
                         setPorHoras(false);
                       }}
                       className={
-                        "flex-1 rounded-xl border px-2 py-2 text-center text-[13px] font-semibold " +
+                        "flex-1 rounded-xl border px-2 py-2 text-center text-sm font-semibold " +
                         (hi === f.inicio && f.fin - f.inicio === dur && !porHoras
                           ? "border-2 border-accent bg-accent-soft"
                           : ok
@@ -203,7 +203,7 @@ export default function ReservarWizard({
                     >
                       {label}
                       <br />
-                      <span className="text-[11px] font-normal">{ok ? `${f.inicio}–${f.fin}` : "ocupada"}</span>
+                      <span className="text-xs font-normal">{ok ? `${f.inicio}–${f.fin}` : "ocupada"}</span>
                     </button>
                   );
                 })}
@@ -310,7 +310,7 @@ export default function ReservarWizard({
 
             {state.error ? <Alert>{state.error}</Alert> : null}
 
-            <div className="text-[11px] font-semibold uppercase tracking-[.06em] text-ink-3">Cómo pagas</div>
+            <div className="text-xs font-semibold uppercase tracking-[.06em] text-ink-3">Cómo pagas</div>
             <label className="flex items-start gap-3 rounded-xl border border-line bg-surface p-3.5">
               <input type="radio" name="metodo" value="transferencia" defaultChecked className="mt-1 size-4" style={{ accentColor: "var(--accent)" }} />
               <span className="text-sm">

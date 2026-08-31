@@ -42,7 +42,7 @@ export default async function Page() {
                   {p.nombre} {p.apellidos}
                   {p.rol === "admin" ? " · admin" : ""}
                   {nuevo ? (
-                    <span className="ml-1.5 rounded-full bg-amber-soft px-1.5 py-0.5 text-[10px] font-semibold text-amber">
+                    <span className="ml-1.5 rounded-full bg-amber-soft px-1.5 py-0.5 text-[0.72rem] font-semibold text-amber">
                       nuevo
                     </span>
                   ) : null}

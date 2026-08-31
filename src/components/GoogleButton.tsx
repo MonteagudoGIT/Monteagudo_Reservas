@@ -23,7 +23,7 @@ export default function GoogleButton() {
       type="button"
       onClick={go}
       disabled={loading}
-      className="flex h-12 items-center justify-center gap-2.5 rounded-xl border border-line-strong bg-surface text-[15px] font-semibold transition-colors hover:bg-surface-2 disabled:opacity-60"
+      className="flex h-12 items-center justify-center gap-2.5 rounded-xl border border-line-strong bg-surface text-base font-semibold transition-colors hover:bg-surface-2 disabled:opacity-60"
     >
       <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
         <path

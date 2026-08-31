@@ -28,7 +28,7 @@ export function TextInput(props: ComponentProps<"input">) {
     <input
       {...props}
       className={
-        "h-12 rounded-xl border border-line-strong bg-surface px-3.5 text-[15px] text-ink " +
+        "h-12 rounded-xl border border-line-strong bg-surface px-3.5 text-base text-ink " +
         "outline-none focus:border-accent focus:ring-2 focus:ring-accent/25 " +
         "disabled:opacity-60 " +
         (props.className ?? "")
@@ -42,7 +42,7 @@ export function Select(props: ComponentProps<"select">) {
     <select
       {...props}
       className={
-        "h-12 rounded-xl border border-line-strong bg-surface px-3 text-[15px] text-ink " +
+        "h-12 rounded-xl border border-line-strong bg-surface px-3 text-base text-ink " +
         "outline-none focus:border-accent focus:ring-2 focus:ring-accent/25 " +
         (props.className ?? "")
       }
@@ -55,7 +55,7 @@ export function Textarea(props: ComponentProps<"textarea">) {
     <textarea
       {...props}
       className={
-        "min-h-28 rounded-xl border border-line-strong bg-surface px-3.5 py-3 text-[15px] text-ink " +
+        "min-h-28 rounded-xl border border-line-strong bg-surface px-3.5 py-3 text-base text-ink " +
         "outline-none focus:border-accent focus:ring-2 focus:ring-accent/25 " +
         (props.className ?? "")
       }
@@ -82,7 +82,7 @@ export function SubmitButton({
       type="submit"
       disabled={pending}
       className={
-        "flex h-12 items-center justify-center rounded-xl px-4 text-[15px] font-semibold " +
+        "flex h-12 items-center justify-center rounded-xl px-4 text-base font-semibold " +
         "transition-colors disabled:opacity-60 " +
         look +
         " " +

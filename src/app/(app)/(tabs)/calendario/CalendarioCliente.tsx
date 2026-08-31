@@ -64,7 +64,7 @@ export default function CalendarioCliente({
   miVivienda: string;
   hoy: string;
 }) {
-  const [vista, setVista] = useState<"dia" | "semana" | "mes">("dia");
+  const [vista, setVista] = useState<"dia" | "semana" | "mes">("mes");
   const [ref, setRef] = useState<string>(hoy);
 
   // Si cambia el "hoy" del servidor (p. ej. la pestaña sigue abierta al pasar de día),
@@ -126,7 +126,7 @@ export default function CalendarioCliente({
                 key={v}
                 onClick={() => setVista(v)}
                 className={
-                  "rounded-md px-3 py-1 text-[12px] font-semibold capitalize " +
+                  "rounded-md px-3 py-1 text-xs font-semibold capitalize " +
                   (vista === v ? "bg-surface text-ink shadow-sm" : "text-ink-2")
                 }
               >
@@ -142,7 +142,7 @@ export default function CalendarioCliente({
           </button>
           <button
             onClick={() => setRef(hoy)}
-            className="flex-1 truncate rounded-lg border border-line-strong bg-surface py-1 font-mono text-[13px] capitalize text-ink-2"
+            className="flex-1 truncate rounded-lg border border-line-strong bg-surface py-1 font-mono text-sm capitalize text-ink-2"
           >
             {ref === hoy ? rotulo : `${rotulo} · ir a hoy`}
           </button>
@@ -165,7 +165,7 @@ export default function CalendarioCliente({
                     (sel ? "border-2 border-accent bg-accent-soft" : "border-line bg-surface")
                   }
                 >
-                  <span className="text-[10px] text-ink-3">{DOW[(new Date(f + "T12:00:00Z").getUTCDay() + 6) % 7]}</span>
+                  <span className="text-[0.72rem] text-ink-3">{DOW[(new Date(f + "T12:00:00Z").getUTCDay() + 6) % 7]}</span>
                   <span className="text-sm font-semibold">{fmt(f, { day: "numeric" })}</span>
                   <span className="flex h-1.5 gap-0.5">
                     {p.sala && <span className="size-1.5 rounded-full bg-accent" />}
@@ -182,7 +182,7 @@ export default function CalendarioCliente({
       <div className="scroll-area min-h-0 flex-1 px-5 pb-6 pt-2">
       {vista === "mes" ? (
         <div className="mt-1">
-          <div className="grid grid-cols-7 gap-1 text-center text-[11px] text-ink-3">
+          <div className="grid grid-cols-7 gap-1 text-center text-xs text-ink-3">
             {DOW.map((d) => (
               <span key={d}>{d}</span>
             ))}
@@ -199,7 +199,7 @@ export default function CalendarioCliente({
                     setVista("dia");
                   }}
                   className={
-                    "flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg text-[13px] " +
+                    "flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg text-sm " +
                     (f === hoy
                       ? "border-2 border-accent font-bold"
                       : reservable(f)
@@ -216,7 +216,7 @@ export default function CalendarioCliente({
               ),
             )}
           </div>
-          <p className="mt-2 text-[11px] text-ink-3">
+          <p className="mt-2 text-xs text-ink-3">
             Solo se puede reservar hasta 7 días vista. Toca un día para ver la disponibilidad.
           </p>
         </div>

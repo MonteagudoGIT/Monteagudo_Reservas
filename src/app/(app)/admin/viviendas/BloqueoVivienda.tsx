@@ -34,7 +34,7 @@ export default function BloqueoVivienda({
               else router.refresh();
             })
           }
-          className="h-8 rounded-lg bg-accent px-3 text-[13px] font-semibold text-white disabled:opacity-50"
+          className="h-8 rounded-lg bg-accent px-3 text-sm font-semibold text-white disabled:opacity-50"
         >
           {pending ? "…" : "Desbloquear"}
         </button>
@@ -46,7 +46,7 @@ export default function BloqueoVivienda({
     return (
       <button
         onClick={() => setAbierto(true)}
-        className="h-8 rounded-lg border border-danger/40 bg-surface px-3 text-[13px] font-semibold text-danger"
+        className="h-8 rounded-lg border border-danger/40 bg-surface px-3 text-sm font-semibold text-danger"
       >
         Bloquear
       </button>
@@ -63,7 +63,7 @@ export default function BloqueoVivienda({
         className="h-9 w-full rounded-lg border border-line-strong bg-surface px-3 text-sm"
       />
       <div className="flex gap-2">
-        <button onClick={() => setAbierto(false)} className="h-8 rounded-lg border border-line-strong bg-surface px-3 text-[13px] font-semibold">
+        <button onClick={() => setAbierto(false)} className="h-8 rounded-lg border border-line-strong bg-surface px-3 text-sm font-semibold">
           Cancelar
         </button>
         <button
@@ -75,7 +75,7 @@ export default function BloqueoVivienda({
               else router.refresh();
             })
           }
-          className="h-8 rounded-lg bg-danger px-3 text-[13px] font-semibold text-white disabled:opacity-50"
+          className="h-8 rounded-lg bg-danger px-3 text-sm font-semibold text-white disabled:opacity-50"
         >
           {pending ? "…" : "Bloquear"}
         </button>
