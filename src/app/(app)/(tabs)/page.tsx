@@ -1,15 +1,11 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { formatoEuros } from "@/lib/reservas";
 
 const MODO_LABEL: Record<string, string> = { sala: "Sala", ping_pong: "Ping Pong" };
-const ESTADO_LABEL: Record<string, string> = {
-  retenida: "Pendiente de pago",
-  confirmada: "Confirmada",
-  pendiente_aprobacion: "Pendiente de aprobación",
-};
 
 function rango(inicio: string, fin: string) {
   const opt: Intl.DateTimeFormatOptions = { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit" };
@@ -28,6 +24,7 @@ export default async function Home() {
   const session = await getSessionUser();
   const supabase = await createClient();
   const perfil = session!.perfil!;
+  const t = await getTranslations("home");
 
   const [{ data: proxima }, { data: saldo }] = await Promise.all([
     supabase
@@ -57,21 +54,21 @@ export default async function Home() {
 
       <div>
         <h1 className="text-2xl font-semibold">
-          Hola, {perfil.nombre?.trim() || session!.user.email}
+          {t("greeting", { name: perfil.nombre?.trim() || session!.user.email || "" })}
         </h1>
         {session!.perfil?.rol === "admin" && (
           <Link
             href="/admin"
             className="mt-1 inline-block rounded-full bg-accent-soft px-2.5 py-1 text-xs font-semibold text-accent-ink"
           >
-            Ir a administración →
+            {t("goToAdmin")}
           </Link>
         )}
       </div>
 
       <div className="rounded-2xl border border-line bg-surface p-4">
         <span className="text-[11px] font-semibold uppercase tracking-[.09em] text-ink-3">
-          Próxima reserva
+          {t("nextBooking")}
         </span>
         {proxima ? (
           <Link href={`/reserva/${proxima.id}`} className="mt-2 block">
@@ -80,11 +77,11 @@ export default async function Home() {
               {fechaLarga(proxima.inicio)} · {rango(proxima.inicio, proxima.fin)}
             </div>
             <div className="mt-2 text-xs font-semibold text-accent-ink">
-              {ESTADO_LABEL[proxima.estado] ?? proxima.estado}
+              {t(`st_${proxima.estado}` as "st_confirmada")}
             </div>
           </Link>
         ) : (
-          <p className="mt-2 text-sm text-ink-2">No tienes reservas próximas.</p>
+          <p className="mt-2 text-sm text-ink-2">{t("noNextBooking")}</p>
         )}
       </div>
 
@@ -95,17 +92,17 @@ export default async function Home() {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M12 5v14M5 12h14" />
         </svg>
-        Reservar
+        {t("reservar")}
       </Link>
 
       <div className="grid grid-cols-2 gap-3">
         <Link href="/calendario" className="rounded-2xl border border-line bg-surface p-4">
-          <div className="text-sm font-semibold">Calendario</div>
-          <div className="text-xs text-ink-3">Ver disponibilidad</div>
+          <div className="text-sm font-semibold">{t("calendarTitle")}</div>
+          <div className="text-xs text-ink-3">{t("calendarHint")}</div>
         </Link>
         <Link href="/mis-reservas" className="rounded-2xl border border-line bg-surface p-4">
-          <div className="text-sm font-semibold">Mis reservas</div>
-          <div className="text-xs text-ink-3">Próximas e historial</div>
+          <div className="text-sm font-semibold">{t("myBookingsTitle")}</div>
+          <div className="text-xs text-ink-3">{t("myBookingsHint")}</div>
         </Link>
       </div>
 
@@ -113,7 +110,7 @@ export default async function Home() {
         href="/perfil"
         className="flex items-center justify-between rounded-2xl border border-line bg-surface px-4 py-3.5"
       >
-        <span className="text-sm">Saldo de la vivienda</span>
+        <span className="text-sm">{t("balance")}</span>
         <span className="font-mono font-medium">{formatoEuros(Number(saldo ?? 0))}</span>
       </Link>
     </main>

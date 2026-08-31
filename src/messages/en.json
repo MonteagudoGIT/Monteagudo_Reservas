@@ -78,9 +78,40 @@
       "generic": "Something went wrong. Please try again."
     }
   },
+  "nav": {
+    "inicio": "Home",
+    "calendario": "Calendar",
+    "reservar": "Book",
+    "misReservas": "My bookings",
+    "perfil": "Profile"
+  },
   "home": {
     "greeting": "Hi, {name}",
     "signedInAs": "Signed in as {email}",
+    "logout": "Sign out",
+    "goToAdmin": "Go to administration →",
+    "nextBooking": "Next booking",
+    "noNextBooking": "You have no upcoming bookings.",
+    "reservar": "Book",
+    "calendarTitle": "Calendar",
+    "calendarHint": "See availability",
+    "myBookingsTitle": "My bookings",
+    "myBookingsHint": "Upcoming and history",
+    "balance": "Home balance",
+    "st_confirmada": "Confirmed",
+    "st_retenida": "Payment pending",
+    "st_pendiente_aprobacion": "Approval pending"
+  },
+  "profile": {
+    "title": "Profile",
+    "vivienda": "Home",
+    "role": "Role",
+    "admin": "Administrator",
+    "resident": "Resident",
+    "balance": "Home balance",
+    "balanceHint": "Only created by cancellations. Used when booking.",
+    "editData": "Edit details",
+    "changePassword": "Change password",
     "logout": "Sign out"
   },
   "language": {

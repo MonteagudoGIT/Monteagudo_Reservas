@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const IconInicio = (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
@@ -28,22 +29,16 @@ const IconPerfil = (
   </svg>
 );
 
-const TABS = [
-  { href: "/", label: "Inicio", icon: IconInicio, exact: true },
-  { href: "/calendario", label: "Calendario", icon: IconCalendario },
-  { href: "/mis-reservas", label: "Mis reservas", icon: IconReservas },
-  { href: "/perfil", label: "Perfil", icon: IconPerfil },
-];
-
 export default function BottomNav() {
   const pathname = usePathname();
+  const t = useTranslations("nav");
   const active = (href: string, exact?: boolean) =>
     exact ? pathname === href : pathname === href || pathname.startsWith(href + "/");
 
   return (
     <nav className="sticky bottom-0 z-20 flex items-end justify-between border-t border-line bg-surface/95 px-5 pb-4 pt-2.5 backdrop-blur">
-      <Tab {...TABS[0]} on={active(TABS[0].href, true)} />
-      <Tab {...TABS[1]} on={active(TABS[1].href)} />
+      <Tab href="/" label={t("inicio")} icon={IconInicio} on={active("/", true)} />
+      <Tab href="/calendario" label={t("calendario")} icon={IconCalendario} on={active("/calendario")} />
 
       <Link
         href="/reservar"
@@ -54,11 +49,11 @@ export default function BottomNav() {
             <path d="M12 5v14M5 12h14" />
           </svg>
         </span>
-        Reservar
+        {t("reservar")}
       </Link>
 
-      <Tab {...TABS[2]} on={active(TABS[2].href)} />
-      <Tab {...TABS[3]} on={active(TABS[3].href)} />
+      <Tab href="/mis-reservas" label={t("misReservas")} icon={IconReservas} on={active("/mis-reservas")} />
+      <Tab href="/perfil" label={t("perfil")} icon={IconPerfil} on={active("/perfil")} />
     </nav>
   );
 }

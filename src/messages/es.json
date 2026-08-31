@@ -78,9 +78,40 @@
       "generic": "Algo ha ido mal. Inténtalo de nuevo."
     }
   },
+  "nav": {
+    "inicio": "Inicio",
+    "calendario": "Calendario",
+    "reservar": "Reservar",
+    "misReservas": "Mis reservas",
+    "perfil": "Perfil"
+  },
   "home": {
     "greeting": "Hola, {name}",
     "signedInAs": "Sesión iniciada como {email}",
+    "logout": "Cerrar sesión",
+    "goToAdmin": "Ir a administración →",
+    "nextBooking": "Próxima reserva",
+    "noNextBooking": "No tienes reservas próximas.",
+    "reservar": "Reservar",
+    "calendarTitle": "Calendario",
+    "calendarHint": "Ver disponibilidad",
+    "myBookingsTitle": "Mis reservas",
+    "myBookingsHint": "Próximas e historial",
+    "balance": "Saldo de la vivienda",
+    "st_confirmada": "Confirmada",
+    "st_retenida": "Pendiente de pago",
+    "st_pendiente_aprobacion": "Pendiente de aprobación"
+  },
+  "profile": {
+    "title": "Perfil",
+    "vivienda": "Vivienda",
+    "role": "Rol",
+    "admin": "Administrador",
+    "resident": "Vecino",
+    "balance": "Saldo de la vivienda",
+    "balanceHint": "Solo se genera por cancelaciones. Se usa al reservar.",
+    "editData": "Editar datos",
+    "changePassword": "Cambiar contraseña",
     "logout": "Cerrar sesión"
   },
   "language": {

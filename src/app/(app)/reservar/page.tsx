@@ -3,7 +3,12 @@ import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
 import ReservarWizard from "./ReservarWizard";
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ fecha?: string; hi?: string }>;
+}) {
+  const sp = await searchParams;
   const session = await getSessionUser();
   const perfil = session!.perfil!;
   const supabase = await createClient();
@@ -44,12 +49,16 @@ export default async function Page() {
     ping_pong: tarifas?.find((t) => t.modo === "ping_pong")?.precio_cent ?? 0,
   };
 
+  const hiNum = sp.hi ? parseInt(sp.hi, 10) : undefined;
+
   return (
     <ReservarWizard
       precios={precios}
       saldoCent={Number(saldo ?? 0)}
       vivienda={vivienda?.etiqueta ?? ""}
       nombre={perfil.nombre ?? ""}
+      fechaInicial={sp.fecha}
+      hiInicial={Number.isInteger(hiNum) ? hiNum : undefined}
     />
   );
 }
