@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { horaMadrid } from "@/lib/reservas";
 
@@ -67,6 +67,10 @@ export default function CalendarioCliente({
   const [vista, setVista] = useState<"dia" | "semana" | "mes">("dia");
   const [ref, setRef] = useState<string>(hoy);
 
+  // Si cambia el "hoy" del servidor (p. ej. la pestaña sigue abierta al pasar de día),
+  // volvemos a hoy.
+  useEffect(() => setRef(hoy), [hoy]);
+
   const porFecha = useMemo(() => {
     const map = new Map<string, Reserva[]>();
     for (const r of reservas) {
@@ -132,12 +136,17 @@ export default function CalendarioCliente({
           </div>
         </div>
 
-        <div className="mt-2.5 flex items-center justify-between">
-          <button onClick={() => step(-1)} className="flex size-8 items-center justify-center rounded-lg border border-line-strong bg-surface">
+        <div className="mt-2.5 flex items-center justify-between gap-2">
+          <button onClick={() => step(-1)} className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-line-strong bg-surface">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 5l-7 7 7 7" /></svg>
           </button>
-          <span className="font-mono text-[13px] capitalize text-ink-2">{rotulo}</span>
-          <button onClick={() => step(1)} className="flex size-8 items-center justify-center rounded-lg border border-line-strong bg-surface">
+          <button
+            onClick={() => setRef(hoy)}
+            className="flex-1 truncate rounded-lg border border-line-strong bg-surface py-1 font-mono text-[13px] capitalize text-ink-2"
+          >
+            {ref === hoy ? rotulo : `${rotulo} · ir a hoy`}
+          </button>
+          <button onClick={() => step(1)} className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-line-strong bg-surface">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 5l7 7-7 7" /></svg>
           </button>
         </div>
