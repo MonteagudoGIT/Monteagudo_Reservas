@@ -41,12 +41,16 @@ function celdasMes(iso: string) {
   const d = new Date(iso + "T12:00:00Z");
   const y = d.getUTCFullYear();
   const m = d.getUTCMonth();
-  const offset = (new Date(Date.UTC(y, m, 1, 12)).getUTCDay() + 6) % 7;
+  const offset = (new Date(Date.UTC(y, m, 1, 12)).getUTCDay() + 6) % 7; // 0 = lunes
   const total = new Date(Date.UTC(y, m + 1, 0, 12)).getUTCDate();
-  const cells: (string | null)[] = Array(offset).fill(null);
-  for (let dd = 1; dd <= total; dd++)
-    cells.push(`${y}-${String(m + 1).padStart(2, "0")}-${String(dd).padStart(2, "0")}`);
-  while (cells.length % 7 !== 0) cells.push(null);
+  const filas = Math.ceil((offset + total) / 7);
+  const inicio = new Date(Date.UTC(y, m, 1 - offset, 12)); // lunes anterior al día 1
+  const cells: { iso: string; otro: boolean }[] = [];
+  for (let i = 0; i < filas * 7; i++) {
+    const c = new Date(inicio);
+    c.setUTCDate(inicio.getUTCDate() + i);
+    cells.push({ iso: c.toISOString().slice(0, 10), otro: c.getUTCMonth() !== m });
+  }
   return cells;
 }
 function fmt(iso: string, o: Intl.DateTimeFormatOptions) {
@@ -188,33 +192,31 @@ export default function CalendarioCliente({
             ))}
           </div>
           <div className="mt-1.5 grid grid-cols-7 gap-1">
-            {celdasMes(ref).map((f, i) =>
-              f == null ? (
-                <span key={i} />
-              ) : (
-                <button
-                  key={f}
-                  onClick={() => {
-                    setRef(f);
-                    setVista("dia");
-                  }}
-                  className={
-                    "flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg text-sm " +
-                    (f === hoy
-                      ? "border-2 border-accent font-bold"
-                      : reservable(f)
-                        ? "border border-line bg-surface font-semibold"
+            {celdasMes(ref).map(({ iso: f, otro }) => (
+              <button
+                key={f}
+                onClick={() => {
+                  setRef(f);
+                  setVista("dia");
+                }}
+                className={
+                  "flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg text-sm " +
+                  (f === hoy
+                    ? "border-2 border-accent font-bold"
+                    : reservable(f)
+                      ? "border border-line bg-surface font-semibold"
+                      : otro
+                        ? "text-ink-3/70"
                         : "border border-dashed border-line bg-surface-2 text-ink-3")
-                  }
-                >
-                  {fmt(f, { day: "numeric" })}
-                  <span className="flex h-1 gap-0.5">
-                    {puntos(f).sala && <span className="size-1 rounded-full bg-accent" />}
-                    {puntos(f).ping && <span className="size-1 rounded-full bg-amber" />}
-                  </span>
-                </button>
-              ),
-            )}
+                }
+              >
+                {fmt(f, { day: "numeric" })}
+                <span className="flex h-1 gap-0.5">
+                  {puntos(f).sala && <span className="size-1 rounded-full bg-accent" />}
+                  {puntos(f).ping && <span className="size-1 rounded-full bg-amber" />}
+                </span>
+              </button>
+            ))}
           </div>
           <p className="mt-2 text-xs text-ink-3">
             Solo se puede reservar hasta 7 días vista. Toca un día para ver la disponibilidad.
