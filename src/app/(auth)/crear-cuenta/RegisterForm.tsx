@@ -4,7 +4,8 @@ import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { registerAction, type FormState } from "../actions";
-import { Field, TextInput, Select, SubmitButton, Alert } from "@/components/ui";
+import { Field, TextInput, Select, SubmitButton, Alert, Divider } from "@/components/ui";
+import GoogleButton from "@/components/GoogleButton";
 
 const initial: FormState = {};
 
@@ -12,6 +13,7 @@ type Vivienda = { id: string; etiqueta: string };
 
 export default function RegisterForm({ viviendas }: { viviendas: Vivienda[] }) {
   const t = useTranslations("auth.register");
+  const tAuth = useTranslations("auth");
   const [state, action] = useActionState(registerAction, initial);
 
   return (
@@ -22,6 +24,9 @@ export default function RegisterForm({ viviendas }: { viviendas: Vivienda[] }) {
       </div>
 
       {state.error ? <Alert>{state.error}</Alert> : null}
+
+      <GoogleButton />
+      <Divider label={tAuth("or")} />
 
       <div className="flex gap-3">
         <Field label={t("firstName")} htmlFor="nombre">

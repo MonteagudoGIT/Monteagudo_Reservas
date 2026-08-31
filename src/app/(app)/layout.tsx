@@ -9,5 +9,11 @@ export default async function AppLayout({
   if (!session?.user) redirect("/entrar");
   if (session.perfil?.estado === "desactivada") redirect("/cuenta-desactivada");
 
+  // Cuentas por Google que aún no han elegido vivienda.
+  const perfil = session.perfil;
+  if (!perfil || (!perfil.vivienda_id && !perfil.vivienda_texto)) {
+    redirect("/completar-perfil");
+  }
+
   return <>{children}</>;
 }

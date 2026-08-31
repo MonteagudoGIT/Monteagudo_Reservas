@@ -4,6 +4,17 @@
     "tagline": "Reservas de la comunidad"
   },
   "auth": {
+    "continueWithGoogle": "Continuar con Google",
+    "or": "o",
+    "completeProfile": {
+      "title": "Ya casi está",
+      "subtitle": "Solo necesitamos saber tu vivienda.",
+      "firstName": "Nombre",
+      "lastName": "Apellidos",
+      "home": "Vivienda",
+      "homePlaceholder": "Elige tu vivienda",
+      "submit": "Guardar y entrar"
+    },
     "login": {
       "title": "Entrar",
       "subtitle": "Reserva de espacios comunes de la comunidad.",

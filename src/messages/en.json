@@ -4,6 +4,17 @@
     "tagline": "Community bookings"
   },
   "auth": {
+    "continueWithGoogle": "Continue with Google",
+    "or": "or",
+    "completeProfile": {
+      "title": "Almost there",
+      "subtitle": "We just need to know your home.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "home": "Home",
+      "homePlaceholder": "Choose your home",
+      "submit": "Save and continue"
+    },
     "login": {
       "title": "Sign in",
       "subtitle": "Book the community's shared spaces.",

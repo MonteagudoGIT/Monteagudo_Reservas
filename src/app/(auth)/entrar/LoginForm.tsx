@@ -4,12 +4,14 @@ import { useActionState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { loginAction, type FormState } from "../actions";
-import { Field, TextInput, SubmitButton, Alert } from "@/components/ui";
+import { Field, TextInput, SubmitButton, Alert, Divider } from "@/components/ui";
+import GoogleButton from "@/components/GoogleButton";
 
 const initial: FormState = {};
 
 export default function LoginForm() {
   const t = useTranslations("auth.login");
+  const tAuth = useTranslations("auth");
   const [state, action] = useActionState(loginAction, initial);
 
   return (
@@ -20,6 +22,9 @@ export default function LoginForm() {
       </div>
 
       {state.error ? <Alert>{state.error}</Alert> : null}
+
+      <GoogleButton />
+      <Divider label={tAuth("or")} />
 
       <Field label={t("email")} htmlFor="email">
         <TextInput
