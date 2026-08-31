@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { horaMadrid } from "@/lib/reservas";
 
@@ -50,6 +51,9 @@ export async function crearReservaAction(
     return { error: MSG[code] ?? "No se ha podido crear la reserva." };
   }
 
+  revalidatePath("/");
+  revalidatePath("/mis-reservas");
+  revalidatePath("/calendario");
   redirect(`/reserva/${data as string}?nueva=1`);
 }
 

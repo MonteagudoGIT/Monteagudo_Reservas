@@ -26,7 +26,7 @@ export default async function Home() {
   const perfil = session!.perfil!;
   const t = await getTranslations("home");
 
-  const [{ data: proxima }, { data: saldo }] = await Promise.all([
+  const [{ data: proxima }, { data: saldo }, { data: avisos }] = await Promise.all([
     supabase
       .from("reservas")
       .select("id, modo, inicio, fin, estado")
@@ -37,6 +37,12 @@ export default async function Home() {
       .limit(1)
       .maybeSingle(),
     supabase.rpc("saldo_vivienda", { p_vivienda: perfil.vivienda_id }),
+    supabase
+      .from("avisos")
+      .select("id, titulo, cuerpo, publicado_en")
+      .eq("publicado", true)
+      .order("publicado_en", { ascending: false })
+      .limit(2),
   ]);
 
   return (
@@ -103,6 +109,21 @@ export default async function Home() {
         <span className="text-sm">{t("balance")}</span>
         <span className="font-mono font-medium">{formatoEuros(Number(saldo ?? 0))}</span>
       </Link>
+
+      {(avisos ?? []).length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-semibold uppercase tracking-[.09em] text-ink-3">Avisos</span>
+            <Link href="/avisos" className="text-xs font-semibold text-accent-ink">Ver todos</Link>
+          </div>
+          {avisos!.map((a) => (
+            <Link key={a.id} href="/avisos" className="block rounded-2xl border border-line bg-surface p-4">
+              <div className="text-sm font-semibold">{a.titulo}</div>
+              <div className="mt-0.5 line-clamp-2 text-xs text-ink-2">{a.cuerpo}</div>
+            </Link>
+          ))}
+        </div>
+      )}
       </div>
     </main>
   );

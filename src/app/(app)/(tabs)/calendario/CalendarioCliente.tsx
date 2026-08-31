@@ -64,7 +64,7 @@ export default function CalendarioCliente({
   miVivienda: string;
   hoy: string;
 }) {
-  const [vista, setVista] = useState<"dia" | "semana" | "mes">("semana");
+  const [vista, setVista] = useState<"dia" | "semana" | "mes">("dia");
   const [ref, setRef] = useState<string>(hoy);
 
   const porFecha = useMemo(() => {
