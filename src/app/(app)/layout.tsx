@@ -15,5 +15,5 @@ export default async function AppLayout({
     redirect("/completar-perfil");
   }
 
-  return <>{children}</>;
+  return <div className="h-full">{children}</div>;
 }

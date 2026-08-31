@@ -61,7 +61,14 @@
   --font-mono: var(--font-mono);
 }
 
+html {
+  height: 100%;
+}
+
 body {
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
   background: var(--ground);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -69,4 +76,11 @@ body {
 
 * {
   border-color: var(--line);
+}
+
+/* La zona de contenido no arrastra el rebote a toda la página */
+.scroll-area {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }

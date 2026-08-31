@@ -24,24 +24,26 @@ export default async function Page() {
   ]);
 
   return (
-    <main className="flex flex-col gap-5 px-5 pb-6 pt-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold">{t("title")}</h1>
-        <LanguageSwitcher />
-      </div>
-
-      <div className="flex items-center gap-3.5">
-        <span className="flex size-13 items-center justify-center rounded-full bg-accent-soft text-lg font-semibold text-accent-ink">
-          {(perfil.nombre?.[0] ?? "") + (perfil.apellidos?.[0] ?? "")}
-        </span>
-        <div>
-          <div className="text-lg font-semibold">
-            {perfil.nombre} {perfil.apellidos}
-          </div>
-          <div className="text-sm text-ink-2">{session!.user.email}</div>
+    <main className="flex h-full flex-col">
+      <header className="shrink-0 px-5 pb-3 pt-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-semibold">{t("title")}</h1>
+          <LanguageSwitcher />
         </div>
-      </div>
+        <div className="mt-3 flex items-center gap-3.5">
+          <span className="flex size-13 items-center justify-center rounded-full bg-accent-soft text-lg font-semibold text-accent-ink">
+            {(perfil.nombre?.[0] ?? "") + (perfil.apellidos?.[0] ?? "")}
+          </span>
+          <div>
+            <div className="text-lg font-semibold">
+              {perfil.nombre} {perfil.apellidos}
+            </div>
+            <div className="text-sm text-ink-2">{session!.user.email}</div>
+          </div>
+        </div>
+      </header>
 
+      <div className="scroll-area min-h-0 flex-1 space-y-5 px-5 pb-6 pt-1">
       <div className="rounded-2xl border border-line bg-surface px-4">
         <Row k={t("vivienda")} v={vivienda?.etiqueta ?? "—"} />
         <Row k={t("role")} v={perfil.rol === "admin" ? t("admin") : t("resident")} last />
@@ -117,6 +119,7 @@ export default async function Page() {
           {t("logout")}
         </button>
       </form>
+      </div>
     </main>
   );
 }

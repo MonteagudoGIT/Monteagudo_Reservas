@@ -46,7 +46,7 @@ export default async function Page({
     (session!.perfil!.rol === "admin" || (!empezada && !faltaMenosDeUnaHora));
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-4 px-5 pb-8 pt-5">
+    <main className="mx-auto scroll-area flex h-full w-full max-w-md flex-col gap-4 px-5 pb-8 pt-5">
       <div className="flex items-center gap-3.5">
         <Link
           href="/mis-reservas"

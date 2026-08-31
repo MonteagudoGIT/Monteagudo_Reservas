@@ -40,20 +40,19 @@ export default async function Home() {
   ]);
 
   return (
-    <main className="flex flex-col gap-5 px-5 pb-6 pt-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.8" aria-hidden>
-            <path d="M5 21V10a7 7 0 0 1 14 0v11" />
-            <path d="M3 21h18" />
-          </svg>
-          <span className="font-semibold tracking-tight">Monteagudo</span>
+    <main className="flex h-full flex-col">
+      <header className="shrink-0 px-5 pb-3 pt-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.8" aria-hidden>
+              <path d="M5 21V10a7 7 0 0 1 14 0v11" />
+              <path d="M3 21h18" />
+            </svg>
+            <span className="font-semibold tracking-tight">Monteagudo</span>
+          </div>
+          <LanguageSwitcher />
         </div>
-        <LanguageSwitcher />
-      </div>
-
-      <div>
-        <h1 className="text-2xl font-semibold">
+        <h1 className="mt-3 text-2xl font-semibold">
           {t("greeting", { name: perfil.nombre?.trim() || session!.user.email || "" })}
         </h1>
         {session!.perfil?.rol === "admin" && (
@@ -64,8 +63,9 @@ export default async function Home() {
             {t("goToAdmin")}
           </Link>
         )}
-      </div>
+      </header>
 
+      <div className="scroll-area min-h-0 flex-1 space-y-4 px-5 pb-6 pt-1">
       <div className="rounded-2xl border border-line bg-surface p-4">
         <span className="text-[11px] font-semibold uppercase tracking-[.09em] text-ink-3">
           {t("nextBooking")}
@@ -103,6 +103,7 @@ export default async function Home() {
         <span className="text-sm">{t("balance")}</span>
         <span className="font-mono font-medium">{formatoEuros(Number(saldo ?? 0))}</span>
       </Link>
+      </div>
     </main>
   );
 }

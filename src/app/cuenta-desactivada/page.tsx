@@ -11,7 +11,7 @@ export default async function Page() {
   const t = await getTranslations("auth.errors");
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-sm flex-col items-center justify-center gap-5 px-6 text-center">
+    <main className="mx-auto flex h-full w-full max-w-sm flex-col items-center justify-center gap-5 px-6 text-center">
       <span className="flex size-14 items-center justify-center rounded-full bg-danger-soft">
         <svg
           width="24"

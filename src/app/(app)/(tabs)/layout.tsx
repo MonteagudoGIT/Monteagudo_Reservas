@@ -5,8 +5,8 @@ export default function TabsLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
   return (
-    <div className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden">
-      <div className="flex-1 overflow-y-auto">{children}</div>
+    <div className="mx-auto flex h-full w-full max-w-md flex-col overflow-hidden">
+      <div className="min-h-0 flex-1">{children}</div>
       <BottomNav />
     </div>
   );

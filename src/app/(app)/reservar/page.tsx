@@ -25,7 +25,7 @@ export default async function Page({
 
   if (vivienda?.bloqueada) {
     return (
-      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center gap-4 px-6 text-center">
+      <main className="mx-auto flex h-full w-full max-w-md flex-col items-center justify-center gap-4 px-6 text-center">
         <span className="flex size-14 items-center justify-center rounded-full bg-danger-soft">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" strokeWidth="1.8" aria-hidden>
             <rect x="5" y="11" width="14" height="9" rx="2" />

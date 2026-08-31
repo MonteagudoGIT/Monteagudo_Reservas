@@ -111,9 +111,9 @@ export default function CalendarioCliente({
         : fmt(ref, { weekday: "long", day: "numeric", month: "long" });
 
   return (
-    <main className="flex flex-col px-5 pb-6 pt-6">
+    <main className="flex h-full flex-col">
       {/* ---- Cabecera fija ---- */}
-      <div className="sticky top-0 z-10 -mx-5 bg-ground px-5 pb-3">
+      <div className="shrink-0 px-5 pb-3 pt-6">
         <h1 className="text-xl font-semibold">Calendario</h1>
 
         <div className="mt-3 flex rounded-lg bg-surface-2 p-0.5">
@@ -168,9 +168,10 @@ export default function CalendarioCliente({
         )}
       </div>
 
-      {/* ---- Cuerpo ---- */}
+      {/* ---- Cuerpo (scroll) ---- */}
+      <div className="scroll-area min-h-0 flex-1 px-5 pb-6 pt-2">
       {vista === "mes" ? (
-        <div className="mt-4">
+        <div className="mt-1">
           <div className="grid grid-cols-7 gap-1 text-center text-[11px] text-ink-3">
             {DOW.map((d) => (
               <span key={d}>{d}</span>
@@ -219,13 +220,7 @@ export default function CalendarioCliente({
         />
       )}
 
-      <Link
-        href="/reservar"
-        className="mt-4 flex h-12 items-center justify-center gap-2 rounded-xl bg-accent font-semibold text-white"
-      >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" /></svg>
-        Reservar
-      </Link>
+      </div>
     </main>
   );
 }

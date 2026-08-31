@@ -41,12 +41,13 @@ export default async function Page() {
   ]);
 
   return (
-    <main className="flex flex-col gap-5 px-5 pb-6 pt-6">
-      <div>
+    <main className="flex h-full flex-col">
+      <header className="shrink-0 px-5 pb-3 pt-6">
         <h1 className="text-xl font-semibold">Mis reservas</h1>
         <p className="text-sm text-ink-2">Vivienda · todas las personas</p>
-      </div>
+      </header>
 
+      <div className="scroll-area min-h-0 flex-1 space-y-5 px-5 pb-6 pt-1">
       <Section title="Próximas">
         {(proximas ?? []).length === 0 ? (
           <Empty>No tienes reservas próximas.</Empty>
@@ -64,6 +65,7 @@ export default async function Page() {
           historial!.map((r) => <Card key={r.id} r={r} />)
         )}
       </Section>
+      </div>
     </main>
   );
 }

@@ -17,7 +17,7 @@ export default async function Page() {
     .order("etiqueta");
 
   return (
-    <main className="flex min-h-dvh flex-col items-center px-6 py-14">
+    <main className="scroll-area flex h-full flex-col items-center px-6 py-14">
       <div className="mb-8 flex items-center gap-2">
         <svg
           width="20"

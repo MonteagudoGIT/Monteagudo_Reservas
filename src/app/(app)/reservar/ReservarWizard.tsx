@@ -87,7 +87,7 @@ export default function ReservarWizard({
   const seleccionado = (h: number) => hi != null && hf != null && h >= hi && h < hf;
 
   return (
-    <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden">
+    <main className="mx-auto flex h-full w-full max-w-md flex-col overflow-hidden">
       {/* ---- Cabecera de pasos (fija) ---- */}
       <div className="shrink-0 px-5 pt-5">
         <div className="flex items-center gap-3.5">

@@ -27,9 +27,9 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang={locale}
-      className={`${plexSans.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${plexSans.variable} ${plexMono.variable} antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
