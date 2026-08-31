@@ -113,25 +113,26 @@ export default function CalendarioCliente({
   return (
     <main className="flex h-full flex-col">
       {/* ---- Cabecera fija ---- */}
-      <div className="shrink-0 px-5 pb-3 pt-6">
-        <h1 className="text-xl font-semibold">Calendario</h1>
-
-        <div className="mt-3 flex rounded-lg bg-surface-2 p-0.5">
-          {(["dia", "semana", "mes"] as const).map((v) => (
-            <button
-              key={v}
-              onClick={() => setVista(v)}
-              className={
-                "flex-1 rounded-md py-1.5 text-[13px] font-semibold capitalize " +
-                (vista === v ? "bg-surface text-ink shadow-sm" : "text-ink-2")
-              }
-            >
-              {v === "dia" ? "Día" : v}
-            </button>
-          ))}
+      <div className="shrink-0 px-5 pb-2 pt-4">
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="text-lg font-semibold">Calendario</h1>
+          <div className="flex rounded-lg bg-surface-2 p-0.5">
+            {(["dia", "semana", "mes"] as const).map((v) => (
+              <button
+                key={v}
+                onClick={() => setVista(v)}
+                className={
+                  "rounded-md px-3 py-1 text-[12px] font-semibold capitalize " +
+                  (vista === v ? "bg-surface text-ink shadow-sm" : "text-ink-2")
+                }
+              >
+                {v === "dia" ? "Día" : v}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="mt-3 flex items-center justify-between">
+        <div className="mt-2.5 flex items-center justify-between">
           <button onClick={() => step(-1)} className="flex size-8 items-center justify-center rounded-lg border border-line-strong bg-surface">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 5l-7 7 7 7" /></svg>
           </button>
@@ -142,7 +143,7 @@ export default function CalendarioCliente({
         </div>
 
         {vista === "semana" && (
-          <div className="mt-3 flex justify-between">
+          <div className="mt-2.5 flex justify-between">
             {semanaDe(ref).map((f) => {
               const p = puntos(f);
               const sel = f === ref;
