@@ -49,14 +49,16 @@ export default async function Page() {
         <Row k={t("role")} v={perfil.rol === "admin" ? t("admin") : t("resident")} last />
       </div>
 
-      <div className="flex items-center justify-between rounded-2xl border border-accent/25 bg-accent-soft px-4 py-3">
-        <div>
-          <div className="text-xs font-semibold uppercase tracking-[.09em] text-accent-ink">
+      <div className="rounded-2xl border border-accent/25 bg-accent-soft px-4 py-3">
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-xs font-semibold uppercase tracking-[.09em] text-accent-ink">
             {t("balance")}
-          </div>
-          <div className="text-xs text-ink-2">{t("balanceHint")}</div>
+          </span>
+          <span className="shrink-0 font-mono text-xl font-medium">
+            {formatoEuros(Number(saldo ?? 0))}
+          </span>
         </div>
-        <div className="font-mono text-xl font-medium">{formatoEuros(Number(saldo ?? 0))}</div>
+        <p className="mt-1 text-xs text-ink-2">{t("balanceHint")}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3">
