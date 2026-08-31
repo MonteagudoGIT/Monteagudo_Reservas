@@ -36,7 +36,7 @@ export default function BottomNav() {
     exact ? pathname === href : pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <nav className="sticky bottom-0 z-20 flex items-end justify-between border-t border-line bg-surface/95 px-5 pb-4 pt-2.5 backdrop-blur">
+    <nav className="z-20 flex shrink-0 items-end justify-between border-t border-line bg-surface px-5 pb-4 pt-2.5">
       <Tab href="/" label={t("inicio")} icon={IconInicio} on={active("/", true)} />
       <Tab href="/calendario" label={t("calendario")} icon={IconCalendario} on={active("/calendario")} />
 

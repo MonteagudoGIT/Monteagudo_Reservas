@@ -55,7 +55,6 @@ export default function ReservarWizard({
       .finally(() => setCargando(false));
   }, [fecha]);
 
-  // Hueco preseleccionado desde el calendario
   useEffect(() => {
     if (modo != null && hiInicial != null && !ocupadas.includes(hiInicial)) {
       setHi(hiInicial);
@@ -85,13 +84,12 @@ export default function ReservarWizard({
   const seleccionOk =
     modo != null && hi != null && hf != null && horarioValido(modo, hi, hf) && rangoLibre(hi, dur);
   const saldoAlcanza = saldoCent >= precio;
-
   const seleccionado = (h: number) => hi != null && hf != null && h >= hi && h < hf;
 
   return (
-    <main className="flex min-h-dvh flex-col">
-      {/* ---- Cabecera de pasos ---- */}
-      <div className="px-5 pt-5">
+    <main className="mx-auto flex h-dvh w-full max-w-md flex-col overflow-hidden">
+      {/* ---- Cabecera de pasos (fija) ---- */}
+      <div className="shrink-0 px-5 pt-5">
         <div className="flex items-center gap-3.5">
           <button
             onClick={() => (paso > 1 ? setPaso(paso - 1) : history.back())}
@@ -109,73 +107,77 @@ export default function ReservarWizard({
             </div>
           </div>
         </div>
-        <div className="mt-3 flex gap-1.5">
+        <div className="mb-1 mt-3 flex gap-1.5">
           {[1, 2, 3].map((n) => (
             <span key={n} className={"h-1 flex-1 rounded-full " + (n <= paso ? "bg-accent" : "bg-line-strong")} />
           ))}
         </div>
       </div>
 
-      <div className="flex-1 px-5 py-5">
-        {/* ---- PASO 1 · Espacio ---- */}
-        {paso === 1 && (
-          <div className="flex flex-col gap-3">
-            <p className="text-sm text-ink-2">Es la misma sala. Elige el uso.</p>
-            {(["sala", "ping_pong"] as Modo[]).map((m) => (
-              <button
-                key={m}
-                onClick={() => {
-                  setModo(m);
-                  setPaso(2);
-                }}
-                className={
-                  "flex items-center justify-between rounded-2xl border bg-surface p-4 text-left " +
-                  (modo === m ? "border-2 border-accent" : "border-line")
-                }
-              >
-                <div>
-                  <div className="font-semibold">{MODO_LABEL[m]}</div>
-                  <div className="text-xs text-ink-2">
-                    {m === "sala"
-                      ? "Por franjas o por horas, hasta el día completo."
-                      : "Máximo 2 h. Aviso de revisión al terminar."}
-                  </div>
+      {/* ---- PASO 1 · Espacio ---- */}
+      {paso === 1 && (
+        <div className="flex flex-1 flex-col gap-3 overflow-y-auto px-5 py-5">
+          <p className="text-sm text-ink-2">Es la misma sala. Elige el uso.</p>
+          {(["sala", "ping_pong"] as Modo[]).map((m) => (
+            <button
+              key={m}
+              onClick={() => {
+                setModo(m);
+                setPaso(2);
+              }}
+              className={
+                "flex items-center justify-between rounded-2xl border bg-surface p-4 text-left " +
+                (modo === m ? "border-2 border-accent" : "border-line")
+              }
+            >
+              <div>
+                <div className="font-semibold">{MODO_LABEL[m]}</div>
+                <div className="text-xs text-ink-2">
+                  {m === "sala"
+                    ? "Por franjas o por horas, hasta el día completo."
+                    : "Máximo 2 h. Aviso de revisión al terminar."}
                 </div>
-                <span className="font-mono font-medium">{formatoEuros(precios[m])}</span>
-              </button>
-            ))}
-          </div>
-        )}
+              </div>
+              <span className="font-mono font-medium">{formatoEuros(precios[m])}</span>
+            </button>
+          ))}
+          <Link href="/" className="mt-auto pt-4 text-center text-xs font-semibold text-accent-ink">
+            Cancelar
+          </Link>
+        </div>
+      )}
 
-        {/* ---- PASO 2 · Día y hora ---- */}
-        {paso === 2 && modo && (
-          <div className="flex flex-col gap-4">
-            {/* Tira de días (fija) */}
-            <div className="sticky top-0 z-10 -mx-5 bg-ground px-5 pb-2 pt-1">
-              <div className="flex gap-2 overflow-x-auto">
-                {dias.map(({ iso }, i) => {
-                  const { dow, dia } = nombreDiaCorto(iso);
-                  const sel = iso === fecha;
-                  return (
-                    <button
-                      key={iso}
-                      onClick={() => setFecha(iso)}
-                      className={
-                        "flex min-w-11 flex-col items-center gap-0.5 rounded-xl border px-1.5 py-2 " +
-                        (sel ? "border-2 border-accent bg-accent-soft" : "border-line bg-surface")
-                      }
-                    >
-                      <span className="text-[10px] capitalize text-ink-3">{i === 0 ? "hoy" : dow}</span>
-                      <span className="text-sm font-semibold">{dia}</span>
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="mt-2 text-[11px] font-semibold uppercase tracking-[.06em] text-ink-3">
-                <span className="capitalize">{nombreDiaLargo(fecha)}</span>
-              </div>
+      {/* ---- PASO 2 · Día y hora ---- */}
+      {paso === 2 && modo && (
+        <>
+          {/* Tira de días (fija) */}
+          <div className="shrink-0 border-b border-line bg-ground px-5 pb-2 pt-2">
+            <div className="flex gap-2 overflow-x-auto">
+              {dias.map(({ iso }, i) => {
+                const { dow, dia } = nombreDiaCorto(iso);
+                const sel = iso === fecha;
+                return (
+                  <button
+                    key={iso}
+                    onClick={() => setFecha(iso)}
+                    className={
+                      "flex min-w-11 flex-col items-center gap-0.5 rounded-xl border px-1.5 py-2 " +
+                      (sel ? "border-2 border-accent bg-accent-soft" : "border-line bg-surface")
+                    }
+                  >
+                    <span className="text-[10px] capitalize text-ink-3">{i === 0 ? "hoy" : dow}</span>
+                    <span className="text-sm font-semibold">{dia}</span>
+                  </button>
+                );
+              })}
             </div>
+            <div className="mt-1.5 text-[11px] font-semibold uppercase tracking-[.06em] text-ink-3">
+              <span className="capitalize">{nombreDiaLargo(fecha)}</span>
+            </div>
+          </div>
 
+          {/* Zona con scroll */}
+          <div className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
             {modo === "sala" && (
               <div className="flex gap-2">
                 {franjasDe("sala").map((f) => {
@@ -208,7 +210,6 @@ export default function ReservarWizard({
               </div>
             )}
 
-            {/* Línea horaria: reservado abajo, libre pulsable */}
             <div className="overflow-hidden rounded-2xl border border-line bg-surface">
               {HORAS.map((h, idx) => {
                 const ocupada = !libre(h);
@@ -269,25 +270,32 @@ export default function ReservarWizard({
                 </span>
               </div>
             )}
+          </div>
 
+          {/* Acción fija abajo */}
+          <div className="shrink-0 border-t border-line bg-ground px-5 pb-4 pt-3">
             <button
               disabled={!seleccionOk}
               onClick={() => setPaso(3)}
-              className="mt-1 flex h-12 items-center justify-center rounded-xl bg-accent font-semibold text-white disabled:opacity-50"
+              className="flex h-12 w-full items-center justify-center rounded-xl bg-accent font-semibold text-white disabled:opacity-50"
             >
-              Revisar la reserva
+              {seleccionOk && hi != null && hf != null
+                ? `Revisar · ${String(hi).padStart(2, "0")}:00–${String(hf).padStart(2, "0")}:00`
+                : "Elige un hueco libre"}
             </button>
           </div>
-        )}
+        </>
+      )}
 
-        {/* ---- PASO 3 · Pago ---- */}
-        {paso === 3 && modo && hi != null && hf != null && (
-          <form action={formAction} className="flex flex-col gap-4">
-            <input type="hidden" name="modo" value={modo} />
-            <input type="hidden" name="fecha" value={fecha} />
-            <input type="hidden" name="hi" value={hi} />
-            <input type="hidden" name="hf" value={hf} />
+      {/* ---- PASO 3 · Pago ---- */}
+      {paso === 3 && modo && hi != null && hf != null && (
+        <form action={formAction} className="flex flex-1 flex-col overflow-hidden">
+          <input type="hidden" name="modo" value={modo} />
+          <input type="hidden" name="fecha" value={fecha} />
+          <input type="hidden" name="hi" value={hi} />
+          <input type="hidden" name="hf" value={hf} />
 
+          <div className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
             <div className="rounded-2xl border border-line bg-surface p-4 text-sm">
               <Row k="Espacio" v={MODO_LABEL[modo]} />
               <Row k="Día" v={nombreDiaLargo(fecha)} cap />
@@ -321,16 +329,13 @@ export default function ReservarWizard({
                 </span>
               </span>
             </label>
+          </div>
 
-            <SubmitButton className="mt-2">Confirmar reserva · {formatoEuros(precio)}</SubmitButton>
-            <p className="text-center text-xs text-ink-3">Al confirmar aceptas las normas de uso del espacio.</p>
-          </form>
-        )}
-      </div>
-
-      <div className="sticky bottom-0 border-t border-line bg-ground px-5 py-3 text-center text-xs text-ink-3">
-        <Link href="/" className="font-semibold text-accent-ink">Cancelar</Link>
-      </div>
+          <div className="shrink-0 border-t border-line bg-ground px-5 pb-4 pt-3">
+            <SubmitButton className="w-full">Confirmar · {formatoEuros(precio)}</SubmitButton>
+          </div>
+        </form>
+      )}
     </main>
   );
 }
