@@ -1,0 +1,80 @@
+{
+  "app": {
+    "name": "Monteagudo",
+    "tagline": "Community bookings"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Book the community's shared spaces.",
+      "email": "Email",
+      "password": "Password",
+      "showPassword": "Show",
+      "hidePassword": "Hide",
+      "remember": "Keep me signed in",
+      "forgot": "I forgot my password",
+      "submit": "Sign in",
+      "noAccount": "Don't have an account yet?",
+      "createAccount": "Create account"
+    },
+    "register": {
+      "title": "Create account",
+      "hint": "Every resident has their own account. The administrator reviews the home details.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "home": "Home",
+      "homePlaceholder": "Building 2 · 3rd floor B",
+      "password": "Password",
+      "passwordHint": "At least 8 characters",
+      "accept": "I accept the privacy policy and the terms of use.",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "login": "Sign in"
+    },
+    "verify": {
+      "title": "Check your email",
+      "body": "We sent a verification link to {email}. Open it to activate your account.",
+      "openMail": "Open my email",
+      "resend": "Resend link",
+      "resent": "Link resent.",
+      "wrongEmail": "Wrong email?",
+      "changeEmail": "Change address",
+      "adminNote": "The administrator is notified of your sign-up. You can use the app as soon as you verify your email."
+    },
+    "recover": {
+      "title": "Reset password",
+      "body": "Enter your email and we'll send you a link to set a new password.",
+      "email": "Email",
+      "submit": "Send link",
+      "back": "Back to sign in",
+      "sent": "If that email has an account, we've sent a recovery link."
+    },
+    "newPassword": {
+      "title": "New password",
+      "password": "New password",
+      "confirm": "Repeat password",
+      "submit": "Save password",
+      "mismatch": "The passwords don't match.",
+      "tooShort": "The password must be at least 8 characters.",
+      "done": "Password updated. You can sign in now."
+    },
+    "errors": {
+      "invalidCredentials": "Wrong email or password.",
+      "emailTaken": "An account with that email already exists.",
+      "emailNotConfirmed": "You need to verify your email before signing in.",
+      "disabled": "Your account is disabled. Contact the administrator.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "home": {
+    "greeting": "Hi, {name}",
+    "signedInAs": "Signed in as {email}",
+    "logout": "Sign out"
+  },
+  "language": {
+    "label": "Language",
+    "es": "Castellano",
+    "en": "English"
+  }
+}

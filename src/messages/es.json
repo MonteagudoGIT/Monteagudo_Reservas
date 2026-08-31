@@ -1,0 +1,80 @@
+{
+  "app": {
+    "name": "Monteagudo",
+    "tagline": "Reservas de la comunidad"
+  },
+  "auth": {
+    "login": {
+      "title": "Entrar",
+      "subtitle": "Reserva de espacios comunes de la comunidad.",
+      "email": "Email",
+      "password": "Contraseña",
+      "showPassword": "Mostrar",
+      "hidePassword": "Ocultar",
+      "remember": "Mantener sesión iniciada",
+      "forgot": "He olvidado la contraseña",
+      "submit": "Iniciar sesión",
+      "noAccount": "¿Aún no tienes cuenta?",
+      "createAccount": "Crear cuenta"
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "hint": "Cada vecino tiene su cuenta. Los datos de la vivienda los revisa el administrador.",
+      "firstName": "Nombre",
+      "lastName": "Apellidos",
+      "email": "Email",
+      "home": "Vivienda",
+      "homePlaceholder": "Portal 2 · 3.º B",
+      "password": "Contraseña",
+      "passwordHint": "Mínimo 8 caracteres",
+      "accept": "Acepto la política de privacidad y las condiciones de uso.",
+      "submit": "Crear cuenta",
+      "haveAccount": "¿Ya tienes cuenta?",
+      "login": "Entrar"
+    },
+    "verify": {
+      "title": "Revisa tu correo",
+      "body": "Te hemos enviado un enlace de verificación a {email}. Ábrelo para activar tu cuenta.",
+      "openMail": "Abrir mi correo",
+      "resend": "Reenviar enlace",
+      "resent": "Enlace reenviado.",
+      "wrongEmail": "¿Email equivocado?",
+      "changeEmail": "Cambiar dirección",
+      "adminNote": "El administrador recibe un aviso de tu alta. Podrás usar la app en cuanto verifiques el correo."
+    },
+    "recover": {
+      "title": "Recuperar contraseña",
+      "body": "Escribe tu email y te enviamos un enlace para poner una nueva contraseña.",
+      "email": "Email",
+      "submit": "Enviar enlace",
+      "back": "Volver a entrar",
+      "sent": "Si ese email tiene cuenta, te hemos enviado un enlace de recuperación."
+    },
+    "newPassword": {
+      "title": "Nueva contraseña",
+      "password": "Nueva contraseña",
+      "confirm": "Repite la contraseña",
+      "submit": "Guardar contraseña",
+      "mismatch": "Las contraseñas no coinciden.",
+      "tooShort": "La contraseña debe tener al menos 8 caracteres.",
+      "done": "Contraseña actualizada. Ya puedes entrar."
+    },
+    "errors": {
+      "invalidCredentials": "Email o contraseña incorrectos.",
+      "emailTaken": "Ya existe una cuenta con ese email.",
+      "emailNotConfirmed": "Tienes que verificar tu correo antes de entrar.",
+      "disabled": "Tu cuenta está desactivada. Contacta con el administrador.",
+      "generic": "Algo ha ido mal. Inténtalo de nuevo."
+    }
+  },
+  "home": {
+    "greeting": "Hola, {name}",
+    "signedInAs": "Sesión iniciada como {email}",
+    "logout": "Cerrar sesión"
+  },
+  "language": {
+    "label": "Idioma",
+    "es": "Castellano",
+    "en": "English"
+  }
+}
