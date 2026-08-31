@@ -29,9 +29,9 @@ export default async function Home() {
   const [{ data: proxima }, { data: saldo }, { data: avisos }] = await Promise.all([
     supabase
       .from("reservas")
-      .select("id, modo, inicio, fin, estado")
+      .select("id, modo, inicio, fin, estado, aprobacion")
       .eq("vivienda_id", perfil.vivienda_id!)
-      .in("estado", ["retenida", "confirmada", "pendiente_aprobacion"])
+      .in("estado", ["retenida", "confirmada"])
       .gte("inicio", new Date().toISOString())
       .order("inicio", { ascending: true })
       .limit(1)
@@ -83,7 +83,9 @@ export default async function Home() {
               {fechaLarga(proxima.inicio)} · {rango(proxima.inicio, proxima.fin)}
             </div>
             <div className="mt-2 text-xs font-semibold text-accent-ink">
-              {t(`st_${proxima.estado}` as "st_confirmada")}
+              {proxima.aprobacion === "pendiente"
+                ? t("st_pendiente_aprobacion")
+                : t(`st_${proxima.estado}` as "st_confirmada")}
             </div>
           </Link>
         ) : (

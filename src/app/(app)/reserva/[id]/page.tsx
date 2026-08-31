@@ -42,7 +42,7 @@ export default async function Page({
   const empezada = new Date(r.inicio).getTime() <= Date.now();
   const faltaMenosDeUnaHora = new Date(r.inicio).getTime() - Date.now() < 3600_000;
   const cancelable =
-    ["retenida", "confirmada", "pendiente_aprobacion"].includes(r.estado) &&
+    ["retenida", "confirmada"].includes(r.estado) &&
     (session!.perfil!.rol === "admin" || (!empezada && !faltaMenosDeUnaHora));
 
   return (
