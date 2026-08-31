@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif; background: #efece6; }
+    a { color: inherit; text-decoration: none; }
+    a:hover { opacity: .9; }
+  </style>
+</helmet>
+<div style="width: 1120px; min-height: 820px; margin: 0 auto; background: #f6f4f0; display: flex; color: #23201c; font-size: 14px; line-height: 1.5;">
+
+  <div style="width: 214px; flex: none; background: #fff; border-right: 1px solid #e6e1d8; padding: 22px 16px; display: flex; flex-direction: column; gap: 4px;">
+    <div style="display: flex; align-items: center; gap: 8px; padding: 0 8px 18px;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#477358" stroke-width="1.8"><path d="M5 21V10a7 7 0 0 1 14 0v11"/><path d="M3 21h18"/></svg>
+      <span style="font-weight: 600;">Monteagudo</span>
+    </div>
+    <span style="font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: #948c7e; padding: 0 8px 6px;">Administración</span>
+    <span style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: #6b6459;">Panel</span>
+    <span style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: #6b6459;">Usuarios</span>
+    <span style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: #6b6459;">Reservas</span>
+    <span style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: #6b6459;">Espacio y tarifas</span>
+    <span style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: #6b6459;">Transferencias <span style="margin-left: auto; font-size: 11px; font-weight: 700; background: #f4e8d5; color: #b07d2b; padding: 1px 7px; border-radius: 999px;">3</span></span>
+    <span style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: #6b6459;">Calendario global</span>
+    <span style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; background: #e6efe8; color: #23201c; font-weight: 600;">Código del día</span>
+    <span style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: #6b6459;">Avisos</span>
+    <span style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; color: #6b6459;">Configuración</span>
+  </div>
+
+  <div style="flex: 1; padding: 26px 30px;">
+    <div style="font-size: 20px; font-weight: 600;">Código de acceso del día</div>
+    <div style="color: #6b6459; font-size: 13px;">Una puerta, un código por fecha. Al guardarlo se envía por email a las reservas de ese día.</div>
+
+    <div style="margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 780px;">
+      <div style="background: #fff; border: 1px solid #e6e1d8; border-radius: 14px; padding: 20px;">
+        <div style="font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #948c7e;">Fecha</div>
+        <div style="margin-top: 8px; height: 44px; border: 1px solid #d9d3c8; border-radius: 10px; background: #f6f4f0; display: flex; align-items: center; padding: 0 14px; font-weight: 600;">Sábado 5 septiembre 2026</div>
+
+        <div style="margin-top: 16px; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #948c7e;">Código</div>
+        <div style="margin-top: 8px; height: 56px; border: 2px solid #477358; border-radius: 10px; background: #fff; display: flex; align-items: center; padding: 0 16px; font-family: 'IBM Plex Mono', monospace; font-size: 24px; letter-spacing: .2em; font-weight: 500;">4 7 9 1</div>
+
+        <a style="margin-top: 18px; display: flex; align-items: center; justify-content: center; height: 46px; background: #477358; color: #fff; border-radius: 11px; font-weight: 600;">Guardar y enviar</a>
+        <div style="margin-top: 8px; font-size: 12px; color: #948c7e;">Se enviará a 3 reservas confirmadas de ese día.</div>
+      </div>
+
+      <div style="background: #fff; border: 1px solid #e6e1d8; border-radius: 14px; padding: 20px;">
+        <div style="font-weight: 600;">Recibirán el código</div>
+        <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid #f0ece3;"><span>Luis Pérez · 2.&ordm; A</span><span style="color: #6b6459;">Sala 10–15</span></div>
+          <div style="display: flex; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid #f0ece3;"><span>Joaquín Cuesta · 3.&ordm; B</span><span style="color: #6b6459;">Sala 17–21</span></div>
+          <div style="display: flex; justify-content: space-between;"><span>Ana Gil · 4.&ordm; D</span><span style="color: #6b6459;">Sala 21–23</span></div>
+        </div>
+        <div style="margin-top: 14px; font-size: 12px; color: #948c7e;">Quien reserve más tarde ese mismo día también lo recibe automáticamente.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

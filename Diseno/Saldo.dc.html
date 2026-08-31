@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif; background: #efece6; }
+    a { color: inherit; text-decoration: none; }
+    a:hover { opacity: .88; }
+  </style>
+</helmet>
+<div style="width: 390px; min-height: 860px; margin: 0 auto; background: #f6f4f0; display: flex; flex-direction: column; color: #23201c; font-size: 15px; line-height: 1.5;">
+
+  <div style="display: flex; align-items: center; gap: 14px; padding: 20px 20px 12px;">
+    <span style="width: 34px; height: 34px; border-radius: 50%; border: 1px solid #d9d3c8; display: flex; align-items: center; justify-content: center; background: #fff;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#23201c" stroke-width="1.8"><path d="M15 5l-7 7 7 7"/></svg>
+    </span>
+    <span style="font-weight: 600; font-size: 17px;">Saldo de la vivienda</span>
+  </div>
+
+  <div style="flex: 1; padding: 8px 20px 24px;">
+    <div style="background: #e6efe8; border: 1px solid #cfe0d5; border-radius: 16px; padding: 20px; text-align: center;">
+      <div style="font-size: 12px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: #477358;">Disponible</div>
+      <div style="font-family: 'IBM Plex Mono', monospace; font-size: 36px; font-weight: 500; margin-top: 6px;">8,00 €</div>
+      <div style="font-size: 12px; color: #5b7a67; margin-top: 4px;">Se usa automáticamente al reservar, si llega.</div>
+    </div>
+
+    <div style="margin-top: 20px; font-size: 12px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: #948c7e;">Movimientos</div>
+    <div style="margin-top: 10px; background: #fff; border: 1px solid #e6e1d8; border-radius: 14px; padding: 4px 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid #f0ece3;">
+        <span><span style="font-weight: 600; font-size: 14px;">Abono por cancelación</span><br><span style="font-size: 12px; color: #6b6459;">Ping Pong · 28 ago</span></span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: #477358;">+6,00 €</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid #f0ece3;">
+        <span><span style="font-weight: 600; font-size: 14px;">Reserva pagada con saldo</span><br><span style="font-size: 12px; color: #6b6459;">Sala · 20 ago</span></span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: #a34b42;">−15,00 €</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 13px 0;">
+        <span><span style="font-weight: 600; font-size: 14px;">Abono por cancelación</span><br><span style="font-size: 12px; color: #6b6459;">Sala · 12 ago</span></span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 600; color: #477358;">+17,00 €</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 14px; font-size: 12px; color: #948c7e;">El saldo solo se genera por cancelaciones. No se puede recargar ni retirar.</div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

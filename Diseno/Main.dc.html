@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif; background: #efece6; }
+    a { color: inherit; text-decoration: none; }
+    a:hover { opacity: .88; }
+  </style>
+</helmet>
+<div style="width: 390px; min-height: 880px; margin: 0 auto; background: #f6f4f0; display: flex; flex-direction: column; color: #23201c; font-size: 15px; line-height: 1.5;">
+  <div style="flex: 1; padding: 24px 20px 10px;">
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#477358" stroke-width="1.8"><path d="M5 21V10a7 7 0 0 1 14 0v11"/><path d="M3 21h18"/></svg>
+        <span style="font-weight: 600; letter-spacing: .02em;">Monteagudo</span>
+      </div>
+      <span style="width: 34px; height: 34px; border-radius: 50%; background: #e6efe8; color: #477358; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 13px;">JC</span>
+    </div>
+
+    <div style="margin-top: 24px;">
+      <div style="font-size: 22px; font-weight: 600;">Hola, Joaquín</div>
+      <div style="color: #6b6459; font-size: 13px;">Vivienda 3.&ordm; B</div>
+    </div>
+
+    <div style="margin-top: 18px; background: #fff; border: 1px solid #e6e1d8; border-radius: 14px; padding: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: #948c7e;">Próxima reserva</span>
+        <span style="font-size: 11px; font-weight: 600; color: #477358; background: #e6efe8; padding: 3px 9px; border-radius: 999px;">Confirmada</span>
+      </div>
+      <div style="font-size: 18px; font-weight: 600; margin-top: 10px;">Sala</div>
+      <div style="color: #6b6459; font-size: 14px; margin-top: 2px;">Sábado 5 sep · 17:00 – 21:00</div>
+      <div style="margin-top: 12px; font-size: 13px; color: #948c7e;">El código de acceso llega el mismo día.</div>
+    </div>
+
+    <a style="margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; height: 50px; background: #477358; color: #fff; border-radius: 12px; font-weight: 600;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Reservar
+    </a>
+
+    <div style="display: flex; gap: 12px; margin-top: 12px;">
+      <a style="flex: 1; background: #fff; border: 1px solid #e6e1d8; border-radius: 14px; padding: 14px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#477358" stroke-width="1.7"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>
+        <div style="font-weight: 600; margin-top: 8px; font-size: 14px;">Calendario</div>
+        <div style="color: #948c7e; font-size: 12px;">Ver disponibilidad</div>
+      </a>
+      <a style="flex: 1; background: #fff; border: 1px solid #e6e1d8; border-radius: 14px; padding: 14px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#477358" stroke-width="1.7"><path d="M4 7.5h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z"/><path d="M14 7.5v11"/></svg>
+        <div style="font-weight: 600; margin-top: 8px; font-size: 14px;">Mis reservas</div>
+        <div style="color: #948c7e; font-size: 12px;">2 próximas</div>
+      </a>
+    </div>
+
+    <a style="margin-top: 12px; display: flex; justify-content: space-between; align-items: center; background: #fff; border: 1px solid #e6e1d8; border-radius: 14px; padding: 14px 16px;">
+      <span style="font-size: 14px;">Saldo de la vivienda</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 500;">8,00 €</span>
+    </a>
+
+    <div style="margin-top: 20px;">
+      <div style="font-size: 11px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: #948c7e; margin-bottom: 8px;">Avisos</div>
+      <div style="background: #fff; border: 1px solid #e6e1d8; border-radius: 14px; padding: 14px 16px;">
+        <div style="font-weight: 600; font-size: 14px;">Limpieza de la sala</div>
+        <div style="color: #6b6459; font-size: 13px; margin-top: 2px;">El viernes por la mañana puede no estar disponible.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="position: sticky; bottom: 0; display: flex; justify-content: space-between; align-items: flex-end; padding: 10px 22px 16px; background: rgba(255,255,255,.92); border-top: 1px solid #e6e1d8;">
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #23201c; font-size: 11px; font-weight: 600;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>
+      Inicio
+    </span>
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #948c7e; font-size: 11px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></svg>
+      Calendario
+    </span>
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 5px; color: #477358; font-size: 11px; font-weight: 600; margin-top: -20px;">
+      <span style="width: 52px; height: 52px; border-radius: 50%; background: #477358; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 18px -6px rgba(71,115,88,.6);">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      </span>
+      Reservar
+    </span>
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #948c7e; font-size: 11px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7.5h16v3a2 2 0 0 0 0 4v3H4v-3a2 2 0 0 0 0-4z"/><path d="M14 7.5v11"/></svg>
+      Reservas
+    </span>
+    <span style="display: flex; flex-direction: column; align-items: center; gap: 3px; color: #948c7e; font-size: 11px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.5"/><path d="M5.5 20c1.6-3.6 11.4-3.6 13 0"/></svg>
+      Perfil
+    </span>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

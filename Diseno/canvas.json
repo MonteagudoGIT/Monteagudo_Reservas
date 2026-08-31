@@ -1,0 +1,45 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "App del vecino" },
+    { "id": "page-2", "name": "Administración" },
+    { "id": "page-3", "name": "Web / escritorio" }
+  ],
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 390, "h": 920, "page": "page-1", "title": "Inicio" },
+    { "file": "Acceso.dc.html", "x": 510, "y": 0, "w": 390, "h": 864, "page": "page-1", "title": "Iniciar sesión" },
+    { "file": "Registro.dc.html", "x": 1020, "y": 0, "w": 390, "h": 920, "page": "page-1", "title": "Crear cuenta" },
+    { "file": "Verificacion.dc.html", "x": 1530, "y": 0, "w": 390, "h": 864, "page": "page-1", "title": "Verificar email" },
+
+    { "file": "Calendario.dc.html", "x": 0, "y": 1120, "w": 390, "h": 920, "page": "page-1", "title": "Calendario · semana" },
+    { "file": "CalendarioMes.dc.html", "x": 510, "y": 1120, "w": 390, "h": 920, "page": "page-1", "title": "Calendario · mes" },
+    { "file": "ReservarModo.dc.html", "x": 1020, "y": 1120, "w": 390, "h": 864, "page": "page-1", "title": "Reservar · 1 espacio" },
+    { "file": "ReservarDia.dc.html", "x": 1530, "y": 1120, "w": 390, "h": 864, "page": "page-1", "title": "Reservar · 2 día" },
+
+    { "file": "ReservarHoras.dc.html", "x": 0, "y": 2240, "w": 390, "h": 920, "page": "page-1", "title": "Reservar · 3 horas" },
+    { "file": "ReservarPago.dc.html", "x": 510, "y": 2240, "w": 390, "h": 960, "page": "page-1", "title": "Reservar · 4 pago" },
+    { "file": "Confirmacion.dc.html", "x": 1020, "y": 2240, "w": 390, "h": 920, "page": "page-1", "title": "Reserva registrada" },
+    { "file": "MisReservas.dc.html", "x": 1530, "y": 2240, "w": 390, "h": 960, "page": "page-1", "title": "Mis reservas" },
+
+    { "file": "DetalleReserva.dc.html", "x": 0, "y": 3360, "w": 390, "h": 920, "page": "page-1", "title": "Detalle + código" },
+    { "file": "Perfil.dc.html", "x": 510, "y": 3360, "w": 390, "h": 920, "page": "page-1", "title": "Perfil" },
+    { "file": "Saldo.dc.html", "x": 1020, "y": 3360, "w": 390, "h": 880, "page": "page-1", "title": "Saldo y movimientos" },
+    { "file": "TemaOscuro.dc.html", "x": 1530, "y": 3360, "w": 390, "h": 900, "page": "page-1", "title": "Tema oscuro" },
+
+    { "file": "AdminPanel.dc.html", "x": 0, "y": 0, "w": 1120, "h": 840, "page": "page-2", "title": "Panel" },
+    { "file": "AdminUsuarios.dc.html", "x": 1280, "y": 0, "w": 1120, "h": 840, "page": "page-2", "title": "Usuarios" },
+    { "file": "AdminTransferencias.dc.html", "x": 0, "y": 980, "w": 1120, "h": 840, "page": "page-2", "title": "Transferencias" },
+    { "file": "AdminCodigo.dc.html", "x": 1280, "y": 980, "w": 1120, "h": 840, "page": "page-2", "title": "Código del día" },
+
+    { "file": "DesktopInicio.dc.html", "x": 0, "y": 0, "w": 1280, "h": 880, "page": "page-3", "title": "Inicio · escritorio" },
+    { "file": "DesktopCalendario.dc.html", "x": 1440, "y": 0, "w": 1280, "h": 880, "page": "page-3", "title": "Calendario · escritorio (semana completa)" },
+    { "file": "DesktopReservar.dc.html", "x": 0, "y": 1040, "w": 1280, "h": 880, "page": "page-3", "title": "Reservar · escritorio" }
+  ],
+  "annotations": [
+    { "id": "intro", "x": 0, "y": -150, "w": 1700, "page": "page-1", "text": "Monteagudo · Fase 2 — mockups estáticos para validar antes de programar. Tipografía IBM Plex, un verde de acento, neutro cálido. Móvil primero: barra inferior de 5 destinos con Reservar en el centro. Tema claro y oscuro (ver artboard Tema oscuro)." },
+    { "id": "calendario-nota", "x": 0, "y": 1000, "w": 900, "page": "page-1", "text": "Calendario: Día / Semana / Mes. La franja 15:00–17:00 aparece siempre como cerrada (siesta) y ninguna reserva la cruza. Color por uso: verde = Sala, ámbar = Ping Pong." },
+    { "id": "flujo-reserva", "x": 0, "y": 2120, "w": 900, "page": "page-1", "text": "Flujo de reserva: espacio → día → horas → revisar y pagar → confirmación. Pago por transferencia (reserva 'retenida' 3 días) o con saldo de la vivienda (confirma al instante)." },
+    { "id": "admin-nota", "x": 0, "y": -130, "w": 1500, "page": "page-2", "text": "Administración (escritorio). 4 pantallas de referencia. Reservas, Calendario global, Espacio y tarifas, Avisos y Configuración reutilizan esta misma estructura y se detallan una vez validada la dirección." },
+    { "id": "web-nota", "x": 0, "y": -140, "w": 1700, "page": "page-3", "text": "Misma app a tamaño escritorio, no un móvil estirado: barra lateral en vez de barra inferior, contenido en columna centrada, y la semana entera visible de un vistazo (en móvil el calendario es de un solo día). El flujo de reserva se abre como panel centrado. Esto es lo que faltaba por validar en web, sobre todo el calendario." }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}
