@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
 import EditarPerfilForm from "./EditarPerfilForm";
@@ -6,6 +7,7 @@ import EditarPerfilForm from "./EditarPerfilForm";
 export default async function Page() {
   const session = await getSessionUser();
   const perfil = session!.perfil!;
+  const t = await getTranslations("editProfile");
   const supabase = await createClient();
   const { data: vivienda } = await supabase
     .from("viviendas")
@@ -24,7 +26,7 @@ export default async function Page() {
             <path d="M15 5l-7 7 7 7" />
           </svg>
         </Link>
-        <span className="font-semibold">Editar datos</span>
+        <span className="font-semibold">{t("title")}</span>
       </div>
 
       <EditarPerfilForm

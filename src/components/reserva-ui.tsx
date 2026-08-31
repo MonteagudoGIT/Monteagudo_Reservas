@@ -36,6 +36,7 @@ export function EstadoPill({
 
 export function CancelarReserva({ id }: { id: string }) {
   const router = useRouter();
+  const t = useTranslations("reservaDetalle");
   const [pending, start] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const [confirmar, setConfirmar] = useState(false);
@@ -46,7 +47,7 @@ export function CancelarReserva({ id }: { id: string }) {
         onClick={() => setConfirmar(true)}
         className="flex h-12 items-center justify-center rounded-xl border border-danger/40 bg-surface font-semibold text-danger"
       >
-        Cancelar reserva
+        {t("cancel")}
       </button>
     );
   }
@@ -54,15 +55,13 @@ export function CancelarReserva({ id }: { id: string }) {
   return (
     <div className="flex flex-col gap-2">
       {error ? <Alert>{error}</Alert> : null}
-      <p className="text-sm text-ink-2">
-        ¿Seguro? Si estaba pagada, el importe vuelve como saldo de tu vivienda.
-      </p>
+      <p className="text-sm text-ink-2">{t("confirmCancel")}</p>
       <div className="flex gap-2">
         <button
           onClick={() => setConfirmar(false)}
           className="h-11 flex-1 rounded-xl border border-line-strong bg-surface font-semibold"
         >
-          No
+          {t("no")}
         </button>
         <button
           disabled={pending}
@@ -75,7 +74,7 @@ export function CancelarReserva({ id }: { id: string }) {
           }
           className="h-11 flex-1 rounded-xl bg-danger font-semibold text-white disabled:opacity-60"
         >
-          {pending ? "…" : "Sí, cancelar"}
+          {pending ? "…" : t("yesCancel")}
         </button>
       </div>
     </div>

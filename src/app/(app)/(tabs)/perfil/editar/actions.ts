@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 
 export type FormState = { error?: string };
@@ -10,11 +11,12 @@ export async function guardarPerfilAction(
   _prev: FormState,
   fd: FormData,
 ): Promise<FormState> {
+  const t = await getTranslations("editProfile");
   const nombre = String(fd.get("nombre") ?? "").trim();
   const apellidos = String(fd.get("apellidos") ?? "").trim();
   const telefono = String(fd.get("telefono") ?? "").trim() || null;
 
-  if (!nombre || !apellidos) return { error: "El nombre y los apellidos son obligatorios." };
+  if (!nombre || !apellidos) return { error: t("required") };
 
   const supabase = await createClient();
   const {
@@ -27,7 +29,7 @@ export async function guardarPerfilAction(
     .update({ nombre, apellidos, telefono })
     .eq("id", user.id);
 
-  if (error) return { error: "No se ha podido guardar. Inténtalo de nuevo." };
+  if (error) return { error: t("failed") };
 
   revalidatePath("/perfil");
   revalidatePath("/");

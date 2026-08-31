@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
 import ReservarWizard from "./ReservarWizard";
@@ -24,6 +24,7 @@ export default async function Page({
   ]);
 
   if (vivienda?.bloqueada) {
+    const t = await getTranslations("reservar");
     return (
       <main className="mx-auto flex h-full w-full max-w-md flex-col items-center justify-center gap-4 px-6 text-center">
         <span className="flex size-14 items-center justify-center rounded-full bg-danger-soft">
@@ -32,13 +33,12 @@ export default async function Page({
             <path d="M8 11V8a4 4 0 0 1 8 0v3" />
           </svg>
         </span>
-        <p className="font-semibold">Tu vivienda no puede reservar ahora mismo</p>
+        <p className="font-semibold">{t("blockedTitle")}</p>
         <p className="text-sm text-ink-2">
-          {vivienda.motivo_bloqueo || "Está bloqueada por impago de cuota."} Contacta con el
-          administrador.
+          {t("blockedBody", { reason: vivienda.motivo_bloqueo || t("blockedDefault") })}
         </p>
         <a href="/" className="text-sm font-semibold text-accent-ink">
-          ← Volver al inicio
+          {t("backHome")}
         </a>
       </main>
     );

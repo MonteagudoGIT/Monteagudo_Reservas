@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import {
   type Modo,
   diasReservables,
@@ -16,8 +17,8 @@ import { crearReservaAction, horasOcupadas, type CrearState } from "./actions";
 import { SubmitButton, Alert } from "@/components/ui";
 
 type Precios = { sala: number; ping_pong: number };
-const MODO_LABEL: Record<Modo, string> = { sala: "Sala", ping_pong: "Ping Pong" };
 const HORAS = [10, 11, 12, 13, 14, 17, 18, 19, 20, 21, 22];
+const LOC: Record<string, string> = { es: "es-ES", en: "en-GB" };
 
 export default function ReservarWizard({
   precios,
@@ -34,6 +35,10 @@ export default function ReservarWizard({
   fechaInicial?: string;
   hiInicial?: number;
 }) {
+  const t = useTranslations("reservar");
+  const tSpace = useTranslations("space");
+  const loc = LOC[useLocale()] ?? "es-ES";
+
   const dias = useMemo(() => diasReservables(), []);
   const [paso, setPaso] = useState(1);
   const [modo, setModo] = useState<Modo | null>(null);
@@ -101,9 +106,9 @@ export default function ReservarWizard({
             </svg>
           </button>
           <div>
-            <div className="text-xs font-semibold uppercase tracking-[.08em] text-ink-3">Reservar</div>
+            <div className="text-xs font-semibold uppercase tracking-[.08em] text-ink-3">{t("eyebrow")}</div>
             <div className="font-semibold">
-              Paso {paso} de 3 · {["Espacio", "Día y hora", "Pago"][paso - 1]}
+              {t("step", { n: paso, name: t((["s1", "s2", "s3"] as const)[paso - 1]) })}
             </div>
           </div>
         </div>
@@ -117,7 +122,7 @@ export default function ReservarWizard({
       {/* ---- PASO 1 · Espacio ---- */}
       {paso === 1 && (
         <div className="flex flex-1 flex-col gap-3 overflow-y-auto px-5 py-5">
-          <p className="text-sm text-ink-2">Es la misma sala. Elige el uso.</p>
+          <p className="text-sm text-ink-2">{t("chooseUse")}</p>
           {(["sala", "ping_pong"] as Modo[]).map((m) => (
             <button
               key={m}
@@ -131,18 +136,16 @@ export default function ReservarWizard({
               }
             >
               <div>
-                <div className="font-semibold">{MODO_LABEL[m]}</div>
+                <div className="font-semibold">{tSpace(m)}</div>
                 <div className="text-xs text-ink-2">
-                  {m === "sala"
-                    ? "Por franjas o por horas, hasta el día completo."
-                    : "Máximo 2 h. Aviso de revisión al terminar."}
+                  {m === "sala" ? t("salaHint") : t("pingHint")}
                 </div>
               </div>
               <span className="font-mono font-medium">{formatoEuros(precios[m])}</span>
             </button>
           ))}
           <Link href="/" className="mt-auto pt-4 text-center text-xs font-semibold text-accent-ink">
-            Cancelar
+            {t("cancel")}
           </Link>
         </div>
       )}
@@ -154,7 +157,7 @@ export default function ReservarWizard({
           <div className="shrink-0 border-b border-line bg-ground px-5 pb-2 pt-2">
             <div className="flex gap-2 overflow-x-auto">
               {dias.map(({ iso }, i) => {
-                const { dow, dia } = nombreDiaCorto(iso);
+                const { dow, dia } = nombreDiaCorto(iso, loc);
                 const sel = iso === fecha;
                 return (
                   <button
@@ -165,14 +168,14 @@ export default function ReservarWizard({
                       (sel ? "border-2 border-accent bg-accent-soft" : "border-line bg-surface")
                     }
                   >
-                    <span className="text-[0.72rem] capitalize text-ink-3">{i === 0 ? "hoy" : dow}</span>
+                    <span className="text-[0.72rem] capitalize text-ink-3">{i === 0 ? t("today") : dow}</span>
                     <span className="text-sm font-semibold">{dia}</span>
                   </button>
                 );
               })}
             </div>
             <div className="mt-1.5 text-xs font-semibold uppercase tracking-[.06em] text-ink-3">
-              <span className="capitalize">{nombreDiaLargo(fecha)}</span>
+              <span className="capitalize">{nombreDiaLargo(fecha, loc)}</span>
             </div>
           </div>
 
@@ -182,7 +185,8 @@ export default function ReservarWizard({
               <div className="flex gap-2">
                 {franjasDe("sala").map((f) => {
                   const ok = rangoLibre(f.inicio, f.fin - f.inicio);
-                  const label = f.clave === "manana" ? "Mañana" : f.clave === "tarde" ? "Tarde" : "Día completo";
+                  const label =
+                    f.clave === "manana" ? t("manana") : f.clave === "tarde" ? t("tarde") : t("diaCompleto");
                   return (
                     <button
                       key={f.clave}
@@ -203,7 +207,7 @@ export default function ReservarWizard({
                     >
                       {label}
                       <br />
-                      <span className="text-xs font-normal">{ok ? `${f.inicio}–${f.fin}` : "ocupada"}</span>
+                      <span className="text-xs font-normal">{ok ? `${f.inicio}–${f.fin}` : t("busy")}</span>
                     </button>
                   );
                 })}
@@ -223,7 +227,7 @@ export default function ReservarWizard({
                           <circle cx="12" cy="12" r="9" />
                           <path d="M8 12h8" />
                         </svg>
-                        Cerrado · siesta 15:00 – 17:00
+                        {t("siesta")}
                       </div>
                     )}
                     <button
@@ -242,11 +246,11 @@ export default function ReservarWizard({
                       <span className="w-11 font-mono text-xs text-ink-3">{String(h).padStart(2, "0")}:00</span>
                       <span className="flex-1 text-xs">
                         {ocupada ? (
-                          <span className="text-ink-3">Reservado</span>
+                          <span className="text-ink-3">{t("reserved")}</span>
                         ) : sel ? (
-                          <span className="font-semibold text-accent-ink">Seleccionado</span>
+                          <span className="font-semibold text-accent-ink">{t("selected")}</span>
                         ) : (
-                          <span className="text-ink-2">Libre</span>
+                          <span className="text-ink-2">{t("free")}</span>
                         )}
                       </span>
                     </button>
@@ -258,10 +262,10 @@ export default function ReservarWizard({
             {hi != null && porHoras && (
               <div className="flex items-center justify-between rounded-xl border border-line bg-surface px-4 py-3">
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-ink-2">Duración</span>
+                  <span className="text-sm text-ink-2">{t("duration")}</span>
                   <div className="flex items-center gap-2">
                     <StepBtn onClick={() => setDur(Math.max(1, dur - 1))} disabled={dur <= 1}>−</StepBtn>
-                    <span className="w-10 text-center font-semibold">{dur} h</span>
+                    <span className="w-12 text-center font-semibold">{t("hours", { n: dur })}</span>
                     <StepBtn onClick={() => setDur(Math.min(durMax(hi), dur + 1))} disabled={dur >= durMax(hi)}>+</StepBtn>
                   </div>
                 </div>
@@ -280,8 +284,10 @@ export default function ReservarWizard({
               className="flex h-12 w-full items-center justify-center rounded-xl bg-accent font-semibold text-white disabled:opacity-50"
             >
               {seleccionOk && hi != null && hf != null
-                ? `Revisar · ${String(hi).padStart(2, "0")}:00–${String(hf).padStart(2, "0")}:00`
-                : "Elige un hueco libre"}
+                ? t("review", {
+                    range: `${String(hi).padStart(2, "0")}:00–${String(hf).padStart(2, "0")}:00`,
+                  })
+                : t("pickSlot")}
             </button>
           </div>
         </>
@@ -297,42 +303,42 @@ export default function ReservarWizard({
 
           <div className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
             <div className="rounded-2xl border border-line bg-surface p-4 text-sm">
-              <Row k="Espacio" v={MODO_LABEL[modo]} />
-              <Row k="Día" v={nombreDiaLargo(fecha)} cap />
-              <Row k="Horario" v={`${String(hi).padStart(2, "0")}:00 – ${String(hf).padStart(2, "0")}:00`} />
-              <Row k="Vivienda" v={`${vivienda} · ${nombre}`} />
+              <Row k={t("space")} v={tSpace(modo)} />
+              <Row k={t("day")} v={nombreDiaLargo(fecha, loc)} cap />
+              <Row k={t("time")} v={`${String(hi).padStart(2, "0")}:00 – ${String(hf).padStart(2, "0")}:00`} />
+              <Row k={t("home")} v={`${vivienda} · ${nombre}`} />
               <div className="my-3 border-t border-line" />
               <div className="flex items-center justify-between">
-                <span className="font-semibold">Total</span>
+                <span className="font-semibold">{t("total")}</span>
                 <span className="font-mono text-lg font-semibold">{formatoEuros(precio)}</span>
               </div>
             </div>
 
             {state.error ? <Alert>{state.error}</Alert> : null}
 
-            <div className="text-xs font-semibold uppercase tracking-[.06em] text-ink-3">Cómo pagas</div>
+            <div className="text-xs font-semibold uppercase tracking-[.06em] text-ink-3">{t("howToPay")}</div>
             <label className="flex items-start gap-3 rounded-xl border border-line bg-surface p-3.5">
               <input type="radio" name="metodo" value="transferencia" defaultChecked className="mt-1 size-4" style={{ accentColor: "var(--accent)" }} />
               <span className="text-sm">
-                <span className="font-semibold">Transferencia</span>
-                <span className="block text-xs text-ink-2">
-                  La reserva queda retenida hasta que el administrador confirme el ingreso (máx. 3 días).
-                </span>
+                <span className="font-semibold">{t("transfer")}</span>
+                <span className="block text-xs text-ink-2">{t("transferHint")}</span>
               </span>
             </label>
             <label className={"flex items-start gap-3 rounded-xl border border-line bg-surface p-3.5 " + (saldoAlcanza ? "" : "opacity-60")}>
               <input type="radio" name="metodo" value="saldo" disabled={!saldoAlcanza} className="mt-1 size-4" style={{ accentColor: "var(--accent)" }} />
               <span className="text-sm">
-                <span className="font-semibold">Saldo de la vivienda</span>
+                <span className="font-semibold">{t("balance")}</span>
                 <span className="block text-xs text-ink-2">
-                  Disponible: {formatoEuros(saldoCent)}. {saldoAlcanza ? "Se confirma al instante." : "Insuficiente."}
+                  {saldoAlcanza
+                    ? t("balanceEnough", { amount: formatoEuros(saldoCent) })
+                    : t("balanceShort", { amount: formatoEuros(saldoCent) })}
                 </span>
               </span>
             </label>
           </div>
 
           <div className="shrink-0 border-t border-line bg-ground px-5 pb-4 pt-3">
-            <SubmitButton className="w-full">Confirmar · {formatoEuros(precio)}</SubmitButton>
+            <SubmitButton className="w-full">{t("confirm", { amount: formatoEuros(precio) })}</SubmitButton>
           </div>
         </form>
       )}

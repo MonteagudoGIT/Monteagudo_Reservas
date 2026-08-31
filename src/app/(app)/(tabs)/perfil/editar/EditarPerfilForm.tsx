@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { useTranslations } from "next-intl";
 import { guardarPerfilAction, type FormState } from "./actions";
 import { Field, TextInput, SubmitButton, Alert } from "@/components/ui";
 
@@ -19,34 +20,39 @@ export default function EditarPerfilForm({
   email: string;
   vivienda: string;
 }) {
+  const t = useTranslations("editProfile");
   const [state, action] = useActionState(guardarPerfilAction, initial);
 
   return (
-    <form action={action} className="flex flex-col gap-4">
+    <form action={action} className="flex flex-col gap-3">
       {state.error ? <Alert>{state.error}</Alert> : null}
 
       <div className="flex gap-3">
-        <Field label="Nombre" htmlFor="nombre">
+        <Field label={t("firstName")} htmlFor="nombre">
           <TextInput id="nombre" name="nombre" defaultValue={nombre} autoComplete="given-name" required />
         </Field>
-        <Field label="Apellidos" htmlFor="apellidos">
+        <Field label={t("lastName")} htmlFor="apellidos">
           <TextInput id="apellidos" name="apellidos" defaultValue={apellidos} autoComplete="family-name" required />
         </Field>
       </div>
 
-      <Field label="Teléfono" htmlFor="telefono" hint="Opcional. Para avisos y contacto.">
+      <Field label={t("phone")} htmlFor="telefono" hint={t("phoneHint")}>
         <TextInput id="telefono" name="telefono" defaultValue={telefono} type="tel" autoComplete="tel" inputMode="tel" />
       </Field>
 
-      <Field label="Email" htmlFor="email" hint="El email no se puede cambiar desde aquí.">
-        <TextInput id="email" value={email} disabled />
-      </Field>
+      <div className="rounded-xl border border-line bg-surface-2 px-4 py-3 text-sm">
+        <div className="flex justify-between gap-3">
+          <span className="text-ink-3">{t("email")}</span>
+          <span className="truncate font-medium">{email}</span>
+        </div>
+        <div className="mt-1.5 flex justify-between gap-3">
+          <span className="text-ink-3">{t("home")}</span>
+          <span className="font-medium">{vivienda}</span>
+        </div>
+        <p className="mt-2 text-xs text-ink-3">{t("homeHint")}</p>
+      </div>
 
-      <Field label="Vivienda" htmlFor="vivienda" hint="Para cambiar de vivienda, contacta con el administrador.">
-        <TextInput id="vivienda" value={vivienda} disabled />
-      </Field>
-
-      <SubmitButton className="mt-2">Guardar</SubmitButton>
+      <SubmitButton className="mt-1">{t("save")}</SubmitButton>
     </form>
   );
 }

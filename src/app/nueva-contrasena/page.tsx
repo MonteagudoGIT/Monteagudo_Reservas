@@ -1,30 +1,32 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { getSessionUser } from "@/lib/auth";
 import NewPasswordForm from "./NewPasswordForm";
 
 export default async function Page() {
   const session = await getSessionUser();
   if (!session?.user) redirect("/recuperar");
+  const t = await getTranslations("auth.newPassword");
 
   return (
-    <main className="scroll-area flex h-full flex-col items-center px-6 py-14">
-      <div className="mb-8 flex items-center gap-2">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="var(--accent)"
-          strokeWidth="1.8"
-          aria-hidden
-        >
-          <path d="M5 21V10a7 7 0 0 1 14 0v11" />
-          <path d="M3 21h18" />
-        </svg>
-        <span className="text-lg font-semibold tracking-tight">Monteagudo</span>
-      </div>
+    <main className="scroll-area flex h-full flex-col items-center px-6 py-12">
       <div className="w-full max-w-sm">
+        <div className="mb-6 flex items-center gap-3.5">
+          <Link
+            href="/perfil"
+            className="flex size-9 items-center justify-center rounded-full border border-line-strong bg-surface"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+              <path d="M15 5l-7 7 7 7" />
+            </svg>
+          </Link>
+          <span className="font-semibold">{t("title")}</span>
+        </div>
         <NewPasswordForm />
+        <Link href="/perfil" className="mt-4 block text-center text-sm font-semibold text-accent-ink">
+          {t("cancel")}
+        </Link>
       </div>
     </main>
   );

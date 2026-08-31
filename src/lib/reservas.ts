@@ -87,9 +87,9 @@ export function horaMadrid(iso: string): number {
   return parseInt(s, 10) % 24;
 }
 
-export function nombreDiaLargo(iso: string): string {
+export function nombreDiaLargo(iso: string, loc = "es-ES"): string {
   const d = new Date(iso + "T12:00:00Z");
-  return d.toLocaleDateString("es-ES", {
+  return d.toLocaleDateString(loc, {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -97,10 +97,13 @@ export function nombreDiaLargo(iso: string): string {
   });
 }
 
-export function nombreDiaCorto(iso: string): { dow: string; dia: string } {
+export function nombreDiaCorto(
+  iso: string,
+  loc = "es-ES",
+): { dow: string; dia: string } {
   const d = new Date(iso + "T12:00:00Z");
   return {
-    dow: d.toLocaleDateString("es-ES", { weekday: "short", timeZone: "UTC" }),
-    dia: d.toLocaleDateString("es-ES", { day: "numeric", timeZone: "UTC" }),
+    dow: d.toLocaleDateString(loc, { weekday: "short", timeZone: "UTC" }),
+    dia: d.toLocaleDateString(loc, { day: "numeric", timeZone: "UTC" }),
   };
 }

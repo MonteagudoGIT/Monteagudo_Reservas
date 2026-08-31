@@ -28,8 +28,10 @@ function addDays(iso: string, n: number) {
 }
 function addMonths(iso: string, n: number) {
   const d = new Date(iso + "T12:00:00Z");
-  d.setUTCMonth(d.getUTCMonth() + n);
-  return d.toISOString().slice(0, 10);
+  // Anclar al día 1 para no saltar meses cortos (31 ago + 1 mes -> 1 sep, no 1 oct).
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + n, 1, 12))
+    .toISOString()
+    .slice(0, 10);
 }
 function lunesDe(iso: string) {
   const d = new Date(iso + "T12:00:00Z");
@@ -123,7 +125,8 @@ export default function CalendarioCliente({
       ? fmt(ref, { month: "long", year: "numeric" })
       : vista === "semana"
         ? `${fmt(lunesDe(ref), { day: "numeric" })}–${fmt(addDays(lunesDe(ref), 6), { day: "numeric", month: "short" })}`
-        : fmt(ref, { weekday: "long", day: "numeric", month: "long" });
+        : (ref === hoy ? `${t("today")} · ` : "") +
+          fmt(ref, { weekday: "long", day: "numeric", month: "long" });
 
   return (
     <main className="flex h-full flex-col">
@@ -173,11 +176,17 @@ export default function CalendarioCliente({
                   onClick={() => setRef(f)}
                   className={
                     "flex w-10 flex-col items-center gap-1 rounded-xl border py-1.5 " +
-                    (sel ? "border-2 border-accent bg-accent-soft" : "border-line bg-surface")
+                    (sel
+                      ? "border-2 border-accent bg-accent-soft"
+                      : f === hoy
+                        ? "border-accent bg-surface"
+                        : "border-line bg-surface")
                   }
                 >
                   <span className="text-[0.72rem] text-ink-3">{DOW[(new Date(f + "T12:00:00Z").getUTCDay() + 6) % 7]}</span>
-                  <span className="text-sm font-semibold">{fmt(f, { day: "numeric" })}</span>
+                  <span className={"text-sm font-semibold " + (f === hoy ? "text-accent-ink" : "")}>
+                    {fmt(f, { day: "numeric" })}
+                  </span>
                   <span className="flex h-1.5 gap-0.5">
                     {p.sala && <span className="size-1.5 rounded-full bg-accent" />}
                     {p.ping && <span className="size-1.5 rounded-full bg-amber" />}
@@ -209,7 +218,7 @@ export default function CalendarioCliente({
                 className={
                   "flex aspect-square flex-col items-center justify-center gap-0.5 rounded-lg text-sm " +
                   (f === hoy
-                    ? "border-2 border-accent font-bold"
+                    ? "bg-accent font-bold text-white"
                     : reservable(f)
                       ? "border border-line bg-surface font-semibold"
                       : otro
@@ -219,8 +228,12 @@ export default function CalendarioCliente({
               >
                 {fmt(f, { day: "numeric" })}
                 <span className="flex h-1 gap-0.5">
-                  {puntos(f).sala && <span className="size-1 rounded-full bg-accent" />}
-                  {puntos(f).ping && <span className="size-1 rounded-full bg-amber" />}
+                  {puntos(f).sala && (
+                    <span className={"size-1 rounded-full " + (f === hoy ? "bg-white" : "bg-accent")} />
+                  )}
+                  {puntos(f).ping && (
+                    <span className={"size-1 rounded-full " + (f === hoy ? "bg-white/70" : "bg-amber")} />
+                  )}
                 </span>
               </button>
             ))}

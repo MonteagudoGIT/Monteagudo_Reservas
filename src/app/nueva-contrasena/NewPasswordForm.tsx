@@ -13,7 +13,6 @@ export default function NewPasswordForm() {
 
   return (
     <form action={action} className="flex flex-col gap-4">
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
 
       {state.error ? <Alert>{state.error}</Alert> : null}
 
