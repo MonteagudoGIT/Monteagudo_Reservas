@@ -1,0 +1,57 @@
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/lib/auth";
+import ReservarWizard from "./ReservarWizard";
+
+export default async function Page() {
+  const session = await getSessionUser();
+  const perfil = session!.perfil!;
+  const supabase = await createClient();
+
+  const [{ data: tarifas }, { data: saldo }, { data: vivienda }] = await Promise.all([
+    supabase.from("tarifas").select("modo, precio_cent"),
+    supabase.rpc("saldo_vivienda", { p_vivienda: perfil.vivienda_id }),
+    supabase
+      .from("viviendas")
+      .select("etiqueta, bloqueada, motivo_bloqueo")
+      .eq("id", perfil.vivienda_id!)
+      .single(),
+  ]);
+
+  if (vivienda?.bloqueada) {
+    return (
+      <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center gap-4 px-6 text-center">
+        <span className="flex size-14 items-center justify-center rounded-full bg-danger-soft">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" strokeWidth="1.8" aria-hidden>
+            <rect x="5" y="11" width="14" height="9" rx="2" />
+            <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+          </svg>
+        </span>
+        <p className="font-semibold">Tu vivienda no puede reservar ahora mismo</p>
+        <p className="text-sm text-ink-2">
+          {vivienda.motivo_bloqueo || "Está bloqueada por impago de cuota."} Contacta con el
+          administrador.
+        </p>
+        <a href="/" className="text-sm font-semibold text-accent-ink">
+          ← Volver al inicio
+        </a>
+      </main>
+    );
+  }
+
+  const precios = {
+    sala: tarifas?.find((t) => t.modo === "sala")?.precio_cent ?? 0,
+    ping_pong: tarifas?.find((t) => t.modo === "ping_pong")?.precio_cent ?? 0,
+  };
+
+  return (
+    <ReservarWizard
+      precios={precios}
+      saldoCent={Number(saldo ?? 0)}
+      vivienda={vivienda?.etiqueta ?? ""}
+      nombre={perfil.nombre ?? ""}
+    />
+  );
+}
+
+export const dynamic = "force-dynamic";

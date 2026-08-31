@@ -1,0 +1,87 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { cancelarReservaAction } from "@/app/(app)/reserva/actions";
+import { Alert } from "@/components/ui";
+
+export function EstadoPill({
+  estado,
+  aprobacion,
+}: {
+  estado: string;
+  aprobacion?: string;
+}) {
+  let label = "";
+  let cls = "bg-surface-2 text-ink-2";
+  if (aprobacion === "pendiente") {
+    label = "Pendiente de aprobación";
+    cls = "bg-amber-soft text-amber";
+  } else if (estado === "confirmada") {
+    label = "Confirmada";
+    cls = "bg-accent-soft text-accent-ink";
+  } else if (estado === "retenida") {
+    label = "Pendiente de pago";
+    cls = "bg-amber-soft text-amber";
+  } else if (estado === "cancelada") {
+    label = "Cancelada";
+    cls = "bg-danger-soft text-danger";
+  } else if (estado === "caducada") {
+    label = "Caducada";
+  } else if (estado === "completada") {
+    label = "Realizada";
+  }
+  return (
+    <span className={"rounded-full px-2.5 py-1 text-[11px] font-semibold " + cls}>
+      {label}
+    </span>
+  );
+}
+
+export function CancelarReserva({ id }: { id: string }) {
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  const [error, setError] = useState<string | null>(null);
+  const [confirmar, setConfirmar] = useState(false);
+
+  if (!confirmar) {
+    return (
+      <button
+        onClick={() => setConfirmar(true)}
+        className="flex h-12 items-center justify-center rounded-xl border border-danger/40 bg-surface font-semibold text-danger"
+      >
+        Cancelar reserva
+      </button>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-2">
+      {error ? <Alert>{error}</Alert> : null}
+      <p className="text-sm text-ink-2">
+        ¿Seguro? Si estaba pagada, el importe vuelve como saldo de tu vivienda.
+      </p>
+      <div className="flex gap-2">
+        <button
+          onClick={() => setConfirmar(false)}
+          className="h-11 flex-1 rounded-xl border border-line-strong bg-surface font-semibold"
+        >
+          No
+        </button>
+        <button
+          disabled={pending}
+          onClick={() =>
+            start(async () => {
+              const r = await cancelarReservaAction(id);
+              if (r.error) setError(r.error);
+              else router.refresh();
+            })
+          }
+          className="h-11 flex-1 rounded-xl bg-danger font-semibold text-white disabled:opacity-60"
+        >
+          {pending ? "…" : "Sí, cancelar"}
+        </button>
+      </div>
+    </div>
+  );
+}
