@@ -43,23 +43,48 @@ export default async function Page() {
         </div>
       </header>
 
-      <div className="scroll-area min-h-0 flex-1 space-y-5 px-5 pb-6 pt-1">
+      <div className="scroll-area min-h-0 flex-1 space-y-3.5 px-5 pb-6 pt-1">
       <div className="rounded-2xl border border-line bg-surface px-4">
         <Row k={t("vivienda")} v={vivienda?.etiqueta ?? "—"} />
         <Row k={t("role")} v={perfil.rol === "admin" ? t("admin") : t("resident")} last />
       </div>
 
-      <div className="rounded-2xl border border-accent/25 bg-accent-soft p-4">
-        <div className="text-[11px] font-semibold uppercase tracking-[.09em] text-accent-ink">
-          {t("balance")}
+      <div className="flex items-center justify-between rounded-2xl border border-accent/25 bg-accent-soft px-4 py-3">
+        <div>
+          <div className="text-[11px] font-semibold uppercase tracking-[.09em] text-accent-ink">
+            {t("balance")}
+          </div>
+          <div className="text-[11px] text-ink-2">{t("balanceHint")}</div>
         </div>
-        <div className="mt-1 font-mono text-2xl font-medium">
-          {formatoEuros(Number(saldo ?? 0))}
-        </div>
-        <div className="mt-1 text-xs text-ink-2">{t("balanceHint")}</div>
+        <div className="font-mono text-xl font-medium">{formatoEuros(Number(saldo ?? 0))}</div>
       </div>
 
+      <div className="grid grid-cols-2 gap-3">
+        <Link
+          href="/perfil/editar"
+          className="rounded-2xl border border-line bg-surface px-4 py-3 text-sm font-semibold"
+        >
+          {t("editData")}
+        </Link>
+        <Link
+          href="/nueva-contrasena"
+          className="rounded-2xl border border-line bg-surface px-4 py-3 text-sm font-semibold"
+        >
+          {t("changePassword")}
+        </Link>
+      </div>
+
+      <form action={logoutAction}>
+        <button className="h-11 w-full rounded-xl border border-line-strong bg-surface font-semibold text-danger">
+          {t("logout")}
+        </button>
+      </form>
+
       {(movimientos ?? []).length > 0 && (
+        <>
+        <div className="pt-1 text-[11px] font-semibold uppercase tracking-[.09em] text-ink-3">
+          Movimientos del saldo
+        </div>
         <div className="rounded-2xl border border-line bg-surface px-4">
           {movimientos!.map((m, i) => (
             <div
@@ -91,34 +116,9 @@ export default async function Page() {
             </div>
           ))}
         </div>
+        </>
       )}
 
-      <div className="overflow-hidden rounded-2xl border border-line bg-surface">
-        <Link
-          href="/perfil/editar"
-          className="flex items-center justify-between border-b border-line px-4 py-3.5 text-sm"
-        >
-          {t("editData")}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="1.8">
-            <path d="M9 5l7 7-7 7" />
-          </svg>
-        </Link>
-        <Link
-          href="/nueva-contrasena"
-          className="flex items-center justify-between px-4 py-3.5 text-sm"
-        >
-          {t("changePassword")}
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth="1.8">
-            <path d="M9 5l7 7-7 7" />
-          </svg>
-        </Link>
-      </div>
-
-      <form action={logoutAction}>
-        <button className="h-11 w-full rounded-xl border border-line-strong bg-surface font-semibold text-danger">
-          {t("logout")}
-        </button>
-      </form>
       </div>
     </main>
   );
