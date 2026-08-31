@@ -2,7 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { horaMadrid } from "@/lib/reservas";
+
+const LOC: Record<string, string> = { es: "es-ES", en: "en-GB" };
 
 type Reserva = {
   id: string;
@@ -17,7 +20,6 @@ type Reserva = {
 type Mant = { inicio: string; fin: string; motivo: string | null };
 
 const HORAS = [10, 11, 12, 13, 14, 17, 18, 19, 20, 21, 22];
-const DOW = ["L", "M", "X", "J", "V", "S", "D"];
 
 function addDays(iso: string, n: number) {
   const d = new Date(iso + "T12:00:00Z");
@@ -53,8 +55,8 @@ function celdasMes(iso: string) {
   }
   return cells;
 }
-function fmt(iso: string, o: Intl.DateTimeFormatOptions) {
-  return new Date(iso + "T12:00:00Z").toLocaleDateString("es-ES", { timeZone: "UTC", ...o });
+function fmtL(iso: string, o: Intl.DateTimeFormatOptions, loc: string) {
+  return new Date(iso + "T12:00:00Z").toLocaleDateString(loc, { timeZone: "UTC", ...o });
 }
 
 export default function CalendarioCliente({
@@ -68,6 +70,11 @@ export default function CalendarioCliente({
   miVivienda: string;
   hoy: string;
 }) {
+  const t = useTranslations("calendar");
+  const loc = LOC[useLocale()] ?? "es-ES";
+  const DOW = t.raw("dow") as string[];
+  const fmt = (iso: string, o: Intl.DateTimeFormatOptions) => fmtL(iso, o, loc);
+
   const [vista, setVista] = useState<"dia" | "semana" | "mes">("mes");
   const [ref, setRef] = useState<string>(hoy);
 
@@ -123,7 +130,7 @@ export default function CalendarioCliente({
       {/* ---- Cabecera fija ---- */}
       <div className="shrink-0 px-5 pb-2 pt-4">
         <div className="flex items-center justify-between gap-3">
-          <h1 className="text-lg font-semibold">Calendario</h1>
+          <h1 className="text-lg font-semibold">{t("title")}</h1>
           <div className="flex rounded-lg bg-surface-2 p-0.5">
             {(["dia", "semana", "mes"] as const).map((v) => (
               <button
@@ -134,7 +141,7 @@ export default function CalendarioCliente({
                   (vista === v ? "bg-surface text-ink shadow-sm" : "text-ink-2")
                 }
               >
-                {v === "dia" ? "Día" : v}
+                {t(v)}
               </button>
             ))}
           </div>
@@ -148,7 +155,7 @@ export default function CalendarioCliente({
             onClick={() => setRef(hoy)}
             className="flex-1 truncate rounded-lg border border-line-strong bg-surface py-1 font-mono text-sm capitalize text-ink-2"
           >
-            {ref === hoy ? rotulo : `${rotulo} · ir a hoy`}
+            {ref === hoy ? rotulo : `${rotulo} · ${t("goToday")}`}
           </button>
           <button onClick={() => step(1)} className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-line-strong bg-surface">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 5l7 7-7 7" /></svg>
@@ -219,7 +226,7 @@ export default function CalendarioCliente({
             ))}
           </div>
           <p className="mt-2 text-xs text-ink-3">
-            Solo se puede reservar hasta 7 días vista. Toca un día para ver la disponibilidad.
+            {t("monthHint")}
           </p>
         </div>
       ) : (
@@ -250,6 +257,8 @@ function Timeline({
   miVivienda: string;
   reservable: boolean;
 }) {
+  const t = useTranslations("calendar");
+  const tSpace = useTranslations("space");
   function cubre(items: { inicio: string; fin: string }[], h: number) {
     return items.find((x) => {
       const hi = horaMadrid(x.inicio);
@@ -269,7 +278,7 @@ function Timeline({
             {h === 17 && (
               <div className="flex items-center gap-2 border-b border-line px-3 py-2 text-xs text-ink-3 [background:repeating-linear-gradient(135deg,var(--surface),var(--surface)_7px,var(--surface-2)_7px,var(--surface-2)_14px)]">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="9" /><path d="M8 12h8" /></svg>
-                Cerrado · siesta 15:00 – 17:00
+                {t("siesta")}
               </div>
             )}
             <div className={"flex gap-3 px-3 py-2.5 " + (idx < HORAS.length - 1 ? "border-b border-line" : "")}>
@@ -277,7 +286,8 @@ function Timeline({
               <div className="flex-1">
                 {m ? (
                   <div className="rounded-md border-l-[3px] border-ink-3 bg-surface-2 px-2.5 py-1.5 text-xs text-ink-2">
-                    Mantenimiento{m.motivo ? ` · ${m.motivo}` : ""}
+                    {t("maintenance")}
+                    {m.motivo ? ` · ${m.motivo}` : ""}
                   </div>
                 ) : r ? (
                   <div
@@ -287,8 +297,8 @@ function Timeline({
                     }
                   >
                     <span className="font-semibold">
-                      {r.modo === "ping_pong" ? "Ping Pong" : "Sala"}
-                      {r.vivienda_id === miVivienda ? " · tú" : ""}
+                      {tSpace(r.modo === "ping_pong" ? "ping_pong" : "sala")}
+                      {r.vivienda_id === miVivienda ? ` · ${t("you")}` : ""}
                     </span>
                   </div>
                 ) : reservable ? (
@@ -296,12 +306,12 @@ function Timeline({
                     href={`/reservar?fecha=${fecha}&hi=${h}`}
                     className="flex items-center justify-between rounded-md border border-dashed border-line-strong px-2.5 py-1.5 text-xs text-ink-2"
                   >
-                    Libre
-                    <span className="font-semibold text-accent-ink">Reservar →</span>
+                    {t("free")}
+                    <span className="font-semibold text-accent-ink">{t("book")} →</span>
                   </Link>
                 ) : (
                   <div className="rounded-md border border-dashed border-line-strong px-2.5 py-1.5 text-xs text-ink-3">
-                    Libre
+                    {t("free")}
                   </div>
                 )}
               </div>

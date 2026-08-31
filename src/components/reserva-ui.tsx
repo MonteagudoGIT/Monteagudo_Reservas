@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { cancelarReservaAction } from "@/app/(app)/reserva/actions";
 import { Alert } from "@/components/ui";
 
@@ -12,28 +13,23 @@ export function EstadoPill({
   estado: string;
   aprobacion?: string;
 }) {
-  let label = "";
+  const t = useTranslations("estados");
+  let key = estado;
   let cls = "bg-surface-2 text-ink-2";
   if (aprobacion === "pendiente") {
-    label = "Pendiente de aprobación";
+    key = "pendiente_aprobacion";
     cls = "bg-amber-soft text-amber";
   } else if (estado === "confirmada") {
-    label = "Confirmada";
     cls = "bg-accent-soft text-accent-ink";
   } else if (estado === "retenida") {
-    label = "Pendiente de pago";
     cls = "bg-amber-soft text-amber";
   } else if (estado === "cancelada") {
-    label = "Cancelada";
     cls = "bg-danger-soft text-danger";
-  } else if (estado === "caducada") {
-    label = "Caducada";
-  } else if (estado === "completada") {
-    label = "Realizada";
   }
+
   return (
     <span className={"rounded-full px-2.5 py-1 text-xs font-semibold " + cls}>
-      {label}
+      {t(key as "confirmada")}
     </span>
   );
 }

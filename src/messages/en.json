@@ -102,6 +102,39 @@
     "st_retenida": "Payment pending",
     "st_pendiente_aprobacion": "Approval pending"
   },
+  "space": { "sala": "Room", "ping_pong": "Ping Pong" },
+  "estados": {
+    "confirmada": "Confirmed",
+    "retenida": "Payment pending",
+    "pendiente_aprobacion": "Approval pending",
+    "cancelada": "Cancelled",
+    "caducada": "Expired",
+    "completada": "Completed"
+  },
+  "calendar": {
+    "title": "Calendar",
+    "dia": "Day",
+    "semana": "Week",
+    "mes": "Month",
+    "goToday": "go to today",
+    "you": "you",
+    "reserved": "Booked",
+    "free": "Free",
+    "selected": "Selected",
+    "maintenance": "Maintenance",
+    "siesta": "Closed · quiet hours 3–5 pm",
+    "book": "Book",
+    "monthHint": "You can only book up to 7 days ahead. Tap a day to see availability.",
+    "dow": ["M", "T", "W", "T", "F", "S", "S"]
+  },
+  "myBookings": {
+    "title": "My bookings",
+    "subtitle": "Home · everyone",
+    "upcoming": "Upcoming",
+    "history": "History",
+    "emptyUpcoming": "You have no upcoming bookings.",
+    "emptyHistory": "No past bookings yet."
+  },
   "profile": {
     "title": "Profile",
     "vivienda": "Home",

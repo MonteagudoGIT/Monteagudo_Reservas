@@ -102,6 +102,39 @@
     "st_retenida": "Pendiente de pago",
     "st_pendiente_aprobacion": "Pendiente de aprobación"
   },
+  "space": { "sala": "Sala", "ping_pong": "Ping Pong" },
+  "estados": {
+    "confirmada": "Confirmada",
+    "retenida": "Pendiente de pago",
+    "pendiente_aprobacion": "Pendiente de aprobación",
+    "cancelada": "Cancelada",
+    "caducada": "Caducada",
+    "completada": "Realizada"
+  },
+  "calendar": {
+    "title": "Calendario",
+    "dia": "Día",
+    "semana": "Semana",
+    "mes": "Mes",
+    "goToday": "ir a hoy",
+    "you": "tú",
+    "reserved": "Reservado",
+    "free": "Libre",
+    "selected": "Seleccionado",
+    "maintenance": "Mantenimiento",
+    "siesta": "Cerrado · siesta 15:00 – 17:00",
+    "book": "Reservar",
+    "monthHint": "Solo se puede reservar hasta 7 días vista. Toca un día para ver la disponibilidad.",
+    "dow": ["L", "M", "X", "J", "V", "S", "D"]
+  },
+  "myBookings": {
+    "title": "Mis reservas",
+    "subtitle": "Vivienda · todas las personas",
+    "upcoming": "Próximas",
+    "history": "Historial",
+    "emptyUpcoming": "No tienes reservas próximas.",
+    "emptyHistory": "Todavía no hay reservas anteriores."
+  },
   "profile": {
     "title": "Perfil",
     "vivienda": "Vivienda",

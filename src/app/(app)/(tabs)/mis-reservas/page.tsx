@@ -1,26 +1,17 @@
 import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
 import { EstadoPill } from "@/components/reserva-ui";
 
-const MODO_LABEL: Record<string, string> = { sala: "Sala", ping_pong: "Ping Pong" };
-
-function rango(inicio: string, fin: string) {
-  const o: Intl.DateTimeFormatOptions = { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit" };
-  return `${new Date(inicio).toLocaleTimeString("es-ES", o)}–${new Date(fin).toLocaleTimeString("es-ES", o)}`;
-}
-function fecha(inicio: string) {
-  return new Date(inicio).toLocaleDateString("es-ES", {
-    timeZone: "Europe/Madrid",
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  });
-}
+const LOC: Record<string, string> = { es: "es-ES", en: "en-GB" };
 
 export default async function Page() {
   const session = await getSessionUser();
   const supabase = await createClient();
+  const t = await getTranslations("myBookings");
+  const tSpace = await getTranslations("space");
+  const loc = LOC[await getLocale()] ?? "es-ES";
   const ahora = new Date().toISOString();
 
   const [{ data: proximas }, { data: historial }] = await Promise.all([
@@ -40,31 +31,53 @@ export default async function Page() {
       .limit(30),
   ]);
 
+  const fecha = (iso: string) =>
+    new Date(iso).toLocaleDateString(loc, {
+      timeZone: "Europe/Madrid",
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+    });
+  const rango = (i: string, f: string) => {
+    const o: Intl.DateTimeFormatOptions = { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit" };
+    return `${new Date(i).toLocaleTimeString(loc, o)}–${new Date(f).toLocaleTimeString(loc, o)}`;
+  };
+
+  const Card = ({ r }: { r: ReservaCard }) => (
+    <Link href={`/reserva/${r.id}`} className="block rounded-xl border border-line bg-surface p-4">
+      <div className="flex items-center justify-between">
+        <span className="font-semibold">{tSpace(r.modo as "sala")}</span>
+        <EstadoPill estado={r.estado} aprobacion={r.aprobacion} />
+      </div>
+      <div className="mt-1 text-sm text-ink-2">
+        {fecha(r.inicio)} · {rango(r.inicio, r.fin)}
+      </div>
+    </Link>
+  );
+
   return (
     <main className="flex h-full flex-col">
       <header className="shrink-0 px-5 pb-3 pt-6">
-        <h1 className="text-xl font-semibold">Mis reservas</h1>
-        <p className="text-sm text-ink-2">Vivienda · todas las personas</p>
+        <h1 className="text-xl font-semibold">{t("title")}</h1>
+        <p className="text-sm text-ink-2">{t("subtitle")}</p>
       </header>
 
       <div className="scroll-area min-h-0 flex-1 space-y-5 px-5 pb-6 pt-1">
-      <Section title="Próximas">
-        {(proximas ?? []).length === 0 ? (
-          <Empty>No tienes reservas próximas.</Empty>
-        ) : (
-          proximas!.map((r) => (
-            <Card key={r.id} r={r} />
-          ))
-        )}
-      </Section>
+        <Section title={t("upcoming")}>
+          {(proximas ?? []).length === 0 ? (
+            <Empty>{t("emptyUpcoming")}</Empty>
+          ) : (
+            proximas!.map((r) => <Card key={r.id} r={r} />)
+          )}
+        </Section>
 
-      <Section title="Historial">
-        {(historial ?? []).length === 0 ? (
-          <Empty>Todavía no hay reservas anteriores.</Empty>
-        ) : (
-          historial!.map((r) => <Card key={r.id} r={r} />)
-        )}
-      </Section>
+        <Section title={t("history")}>
+          {(historial ?? []).length === 0 ? (
+            <Empty>{t("emptyHistory")}</Empty>
+          ) : (
+            historial!.map((r) => <Card key={r.id} r={r} />)
+          )}
+        </Section>
       </div>
     </main>
   );
@@ -73,9 +86,7 @@ export default async function Page() {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-2.5">
-      <div className="text-xs font-semibold uppercase tracking-[.09em] text-ink-3">
-        {title}
-      </div>
+      <div className="text-xs font-semibold uppercase tracking-[.09em] text-ink-3">{title}</div>
       {children}
     </div>
   );
@@ -97,20 +108,3 @@ type ReservaCard = {
   estado: string;
   aprobacion: string;
 };
-
-function Card({ r }: { r: ReservaCard }) {
-  return (
-    <Link
-      href={`/reserva/${r.id}`}
-      className="block rounded-xl border border-line bg-surface p-4"
-    >
-      <div className="flex items-center justify-between">
-        <span className="font-semibold">{MODO_LABEL[r.modo]}</span>
-        <EstadoPill estado={r.estado} aprobacion={r.aprobacion} />
-      </div>
-      <div className="mt-1 text-sm text-ink-2">
-        {fecha(r.inicio)} · {rango(r.inicio, r.fin)}
-      </div>
-    </Link>
-  );
-}
