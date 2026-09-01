@@ -285,7 +285,7 @@ export default function ReservarWizard({
           {/* Zona con scroll */}
           <div className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
             {modo === "sala" && (
-              <div className="flex gap-2">
+              <div className="flex gap-1.5">
                 {franjasDe("sala").map((f) => {
                   const ok = rangoLibre(f.inicio, f.fin - f.inicio);
                   const label =
@@ -301,7 +301,7 @@ export default function ReservarWizard({
                         setPorHoras(false);
                       }}
                       className={
-                        "flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-2 py-1.5 text-xs font-semibold leading-none " +
+                        "flex flex-1 items-center justify-center gap-1 whitespace-nowrap rounded-lg border px-1.5 py-2 text-[0.7rem] font-semibold leading-none " +
                         (activa
                           ? "border-accent bg-accent-soft"
                           : ok
@@ -310,7 +310,7 @@ export default function ReservarWizard({
                       }
                     >
                       <span>{label}</span>
-                      <span className="text-[0.62rem] font-normal text-ink-3">
+                      <span className="font-normal text-ink-3">
                         {ok ? `${f.inicio}–${f.fin}` : t("busy")}
                       </span>
                     </button>
