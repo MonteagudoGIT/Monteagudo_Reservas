@@ -183,11 +183,11 @@
     "backHome": "← Back to home",
     "err_impago": "Your home is blocked for unpaid fees. Contact the administrator.",
     "err_generic": "The booking could not be created.",
-    "err_ocupado": "That slot was just taken. Pick another.",
+    "err_ocupado": "That slot has just been taken. Pick another one.",
     "err_mantenimiento": "That slot is closed for maintenance.",
     "err_saldo": "Not enough balance to pay this way.",
     "err_pasado": "That time has already passed.",
-    "err_fecha": "You can only book up to 7 days ahead.",
+    "err_fecha": "That date is outside the booking window.",
     "payReminder": "Bank-transfer payment: the booking is held for 3 days. If the administrator does not confirm the payment within that time, it is released automatically. If you cancel a paid booking, the amount is refunded to your home balance.",
     "prevMonth": "Previous month",
     "nextMonth": "Next month",
@@ -195,7 +195,13 @@
     "capacity": "Capacity",
     "equipment": "Equipment",
     "rules": "Rules",
-    "people": "{n} people"
+    "people": "{n} people",
+    "err_horario": "That time range is not valid.",
+    "err_junta": "A community-meeting booking only applies to the Sala.",
+    "err_sinVivienda": "Your account has no home assigned.",
+    "err_noAdmin": "This action is admin-only.",
+    "err_seleccion": "Check your selection.",
+    "err_metodo": "Choose a payment method."
   },
   "myBookings": {
     "title": "My bookings",

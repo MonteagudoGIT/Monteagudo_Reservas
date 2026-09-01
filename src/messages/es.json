@@ -187,7 +187,7 @@
     "err_mantenimiento": "Ese tramo está cerrado por mantenimiento.",
     "err_saldo": "No hay saldo suficiente para pagar así.",
     "err_pasado": "Esa hora ya ha pasado.",
-    "err_fecha": "Solo se puede reservar hasta 7 días vista.",
+    "err_fecha": "Esa fecha está fuera del plazo de reserva.",
     "payReminder": "Pago por transferencia: la reserva se guarda 3 días. Si el administrador no confirma el ingreso en ese plazo, se libera automáticamente. Si cancelas una reserva ya pagada, se te devuelve el importe al saldo de la vivienda.",
     "prevMonth": "Mes anterior",
     "nextMonth": "Mes siguiente",
@@ -195,7 +195,13 @@
     "capacity": "Aforo",
     "equipment": "Equipamiento",
     "rules": "Normas",
-    "people": "{n} personas"
+    "people": "{n} personas",
+    "err_horario": "Ese horario no es válido.",
+    "err_junta": "La reserva para junta solo aplica a la Sala.",
+    "err_sinVivienda": "Tu cuenta no tiene vivienda asignada.",
+    "err_noAdmin": "Acción reservada al administrador.",
+    "err_seleccion": "Revisa la selección.",
+    "err_metodo": "Elige un método de pago."
   },
   "myBookings": {
     "title": "Mis reservas",

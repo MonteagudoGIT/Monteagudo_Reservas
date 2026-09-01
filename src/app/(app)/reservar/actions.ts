@@ -2,20 +2,21 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { horaMadrid } from "@/lib/reservas";
 
-const MSG: Record<string, string> = {
-  IMPAGO: "Tu vivienda está bloqueada por impago. Contacta con el administrador.",
-  FECHA: "Esa fecha está fuera del plazo de reserva.",
-  HORARIO: "Ese horario no es válido.",
-  PASADO: "Esa hora ya ha pasado.",
-  SALDO: "No hay saldo suficiente para pagar así.",
-  OCUPADO: "Ese tramo acaba de ocuparse. Elige otro.",
-  MANTENIMIENTO: "Ese tramo está cerrado por mantenimiento.",
-  JUNTA_SOLO_SALA: "La reserva para junta solo aplica a la Sala.",
-  SIN_VIVIENDA: "Tu cuenta no tiene vivienda asignada.",
-  NO_ADMIN: "Acción reservada al administrador.",
+const ERR_KEY: Record<string, string> = {
+  IMPAGO: "err_impago",
+  FECHA: "err_fecha",
+  HORARIO: "err_horario",
+  PASADO: "err_pasado",
+  SALDO: "err_saldo",
+  OCUPADO: "err_ocupado",
+  MANTENIMIENTO: "err_mantenimiento",
+  JUNTA_SOLO_SALA: "err_junta",
+  SIN_VIVIENDA: "err_sinVivienda",
+  NO_ADMIN: "err_noAdmin",
 };
 
 export type CrearState = { error?: string };
@@ -24,6 +25,7 @@ export async function crearReservaAction(
   _prev: CrearState,
   fd: FormData,
 ): Promise<CrearState> {
+  const t = await getTranslations("reservar");
   const modo = String(fd.get("modo"));
   const fecha = String(fd.get("fecha"));
   const hi = Number(fd.get("hi"));
@@ -31,10 +33,10 @@ export async function crearReservaAction(
   const metodo = String(fd.get("metodo"));
 
   if (!["sala", "ping_pong"].includes(modo) || !fecha || !Number.isInteger(hi) || !Number.isInteger(hf)) {
-    return { error: "Revisa la selección." };
+    return { error: t("err_seleccion") };
   }
   if (!["transferencia", "saldo"].includes(metodo)) {
-    return { error: "Elige un método de pago." };
+    return { error: t("err_metodo") };
   }
 
   const supabase = await createClient();
@@ -48,7 +50,7 @@ export async function crearReservaAction(
 
   if (error) {
     const code = (error.message.match(/[A-Z_]{3,}/) ?? [])[0] ?? "";
-    return { error: MSG[code] ?? "No se ha podido crear la reserva." };
+    return { error: t((ERR_KEY[code] ?? "err_generic") as "err_generic") };
   }
 
   revalidatePath("/");

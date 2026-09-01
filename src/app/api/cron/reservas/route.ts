@@ -34,6 +34,9 @@ export async function GET(request: Request) {
   }
   const caducadas = Number(caducadasData ?? 0);
 
+  const { data: completadasData } = await supabase.rpc("completar_reservas");
+  const completadas = Number(completadasData ?? 0);
+
   const { data: pendientes } = await supabase
     .from("reservas")
     .select("id, modo, fecha, inicio, importe_cent, retenida_hasta, usuario_id, vivienda_id")
@@ -117,6 +120,7 @@ ${restantes === 0 ? "Caduca hoy si no se valida." : `Caduca en ${restantes} día
   return NextResponse.json({
     ok: true,
     caducadas,
+    completadas,
     pendientes: pendientes?.length ?? 0,
     avisos,
     mail: mailConfigurado,
