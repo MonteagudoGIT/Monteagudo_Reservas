@@ -217,38 +217,38 @@ export default function ReservarWizard({
       {/* ---- PASO 2 · Día y hora ---- */}
       {paso === 2 && modo && (
         <>
-          {/* Minicalendario (fijo) */}
-          <div className="shrink-0 border-b border-line bg-ground px-5 pb-3 pt-2">
+          {/* Minicalendario (fijo, compacto) */}
+          <div className="shrink-0 border-b border-line bg-ground px-5 pb-2 pt-1.5">
             <div className="flex items-center justify-between">
               <button
                 onClick={() => setMesRef(sumarMeses(mesRef, -1))}
                 disabled={!puedePrev}
                 aria-label={t("prevMonth")}
-                className="flex size-8 items-center justify-center rounded-lg text-ink-2 disabled:opacity-30"
+                className="flex size-7 items-center justify-center rounded-lg text-ink-2 disabled:opacity-30"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M15 5l-7 7 7 7" />
                 </svg>
               </button>
-              <span className="text-sm font-semibold first-letter:uppercase">{mesLargo}</span>
+              <span className="text-[0.8rem] font-semibold first-letter:uppercase">{mesLargo}</span>
               <button
                 onClick={() => setMesRef(sumarMeses(mesRef, 1))}
                 disabled={!puedeNext}
                 aria-label={t("nextMonth")}
-                className="flex size-8 items-center justify-center rounded-lg text-ink-2 disabled:opacity-30"
+                className="flex size-7 items-center justify-center rounded-lg text-ink-2 disabled:opacity-30"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M9 5l7 7-7 7" />
                 </svg>
               </button>
             </div>
 
-            <div className="mt-1 grid grid-cols-7 text-center text-[0.68rem] uppercase text-ink-3">
+            <div className="mt-0.5 grid grid-cols-7 text-center text-[0.62rem] uppercase text-ink-3">
               {DOW.map((d, i) => (
                 <span key={i}>{d}</span>
               ))}
             </div>
-            <div className="mt-1 grid grid-cols-7 gap-1">
+            <div className="mt-0.5 grid grid-cols-7 gap-0.5">
               {celdas.map(({ iso, otroMes }) => {
                 const fuera = iso < hoy || iso > limiteISO;
                 const sel = iso === fecha;
@@ -262,7 +262,7 @@ export default function ReservarWizard({
                       if (otroMes) setMesRef(primerDiaMes(iso));
                     }}
                     className={
-                      "relative flex h-9 items-center justify-center rounded-lg text-sm " +
+                      "relative flex h-7 items-center justify-center rounded-md text-xs " +
                       (sel
                         ? "bg-accent font-bold text-white"
                         : fuera
@@ -274,7 +274,7 @@ export default function ReservarWizard({
                   >
                     {Number(iso.slice(8, 10))}
                     {conReserva && !sel && (
-                      <span className="absolute bottom-1 size-1 rounded-full bg-amber" />
+                      <span className="absolute bottom-0.5 size-1 rounded-full bg-amber" />
                     )}
                   </button>
                 );
