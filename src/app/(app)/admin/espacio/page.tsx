@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { VolverPanel } from "@/components/admin-ui";
-import { TarifasForm, FichaForm } from "./EspacioForms";
+import { TarifasForm, FichaForm, PagoForm } from "./EspacioForms";
 
 const eur = (cent: number) => (cent / 100).toFixed(2).replace(".", ",");
 
@@ -8,7 +8,11 @@ export default async function Page() {
   const supabase = await createClient();
   const [{ data: tarifas }, { data: esp }] = await Promise.all([
     supabase.from("tarifas").select("modo, precio_cent, requiere_aprobacion, dias_antelacion"),
-    supabase.from("espacios").select("aforo, equipamiento, normas").eq("clave", "sala").single(),
+    supabase
+      .from("espacios")
+      .select("aforo, equipamiento, normas, iban, titular_cuenta, concepto_pago")
+      .eq("clave", "sala")
+      .single(),
   ]);
 
   const sala = tarifas?.find((t) => t.modo === "sala");
@@ -31,6 +35,11 @@ export default async function Page() {
           aforo={esp?.aforo != null ? String(esp.aforo) : ""}
           equipamiento={(esp?.equipamiento ?? []).join(", ")}
           normas={esp?.normas ?? ""}
+        />
+        <PagoForm
+          iban={esp?.iban ?? ""}
+          titular={esp?.titular_cuenta ?? ""}
+          concepto={esp?.concepto_pago ?? "Reserva {espacio} {fecha}"}
         />
       </div>
     </div>

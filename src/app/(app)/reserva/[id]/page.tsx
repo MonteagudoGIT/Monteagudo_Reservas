@@ -27,12 +27,26 @@ export default async function Page({
   const { data: r } = await supabase
     .from("reservas")
     .select(
-      "id, modo, tipo_reserva, inicio, fin, estado, aprobacion, importe_cent, metodo_pago, referencia_transferencia, retenida_hasta, creada_por_admin",
+      "id, modo, tipo_reserva, vivienda_id, fecha, inicio, fin, estado, aprobacion, importe_cent, metodo_pago, referencia_transferencia, retenida_hasta, creada_por_admin",
     )
     .eq("id", id)
     .maybeSingle();
 
   if (!r) notFound();
+
+  const pendienteTransferencia = r.estado === "retenida" && r.metodo_pago === "transferencia";
+
+  const [{ data: pago }, { data: viv }] = pendienteTransferencia
+    ? await Promise.all([
+        supabase.from("espacios").select("iban, titular_cuenta, concepto_pago").eq("clave", "sala").single(),
+        supabase.from("viviendas").select("etiqueta").eq("id", r.vivienda_id!).maybeSingle(),
+      ])
+    : [{ data: null }, { data: null }];
+
+  const conceptoPago = (pago?.concepto_pago ?? "Reserva {espacio} {fecha}")
+    .replace("{espacio}", r.modo === "ping_pong" ? "Ping Pong" : "Sala")
+    .replace("{fecha}", r.fecha as string)
+    .replace("{vivienda}", viv?.etiqueta ?? "");
 
   const fmt = (iso: string, o: Intl.DateTimeFormatOptions) =>
     new Date(iso).toLocaleString(loc, { timeZone: "Europe/Madrid", ...o });
@@ -78,10 +92,29 @@ export default async function Page({
         </dl>
       </div>
 
-      {r.estado === "retenida" && r.metodo_pago === "transferencia" ? (
+      {pendienteTransferencia ? (
         <div className="rounded-2xl border border-amber/30 bg-amber-soft p-4 text-sm">
           <div className="font-semibold text-amber">{t("transferPendingTitle")}</div>
           <p className="mt-1 text-ink-2">{t("transferPendingBody")}</p>
+
+          <dl className="mt-3 flex flex-col gap-2 border-t border-amber/20 pt-3">
+            <PagoItem k={t("transferAmount")} v={formatoEuros(r.importe_cent)} mono />
+            {pago?.iban ? <PagoItem k="IBAN" v={pago.iban} mono /> : null}
+            {pago?.titular_cuenta ? <PagoItem k={t("transferHolder")} v={pago.titular_cuenta} /> : null}
+            <PagoItem k={t("transferConcept")} v={conceptoPago} />
+          </dl>
+
+          {r.retenida_hasta ? (
+            <p className="mt-3 text-xs font-semibold text-amber">
+              {t("transferDeadline", {
+                date: fmt(r.retenida_hasta, { day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }),
+              })}
+            </p>
+          ) : null}
+
+          {!pago?.iban ? (
+            <p className="mt-2 text-xs text-ink-3">{t("transferNoIban")}</p>
+          ) : null}
         </div>
       ) : null}
 
@@ -105,6 +138,15 @@ function Item({ k, v, cap }: { k: string; v: string; cap?: boolean }) {
     <div className="flex justify-between">
       <dt className="text-ink-2">{k}</dt>
       <dd className={"font-semibold " + (cap ? "capitalize" : "")}>{v}</dd>
+    </div>
+  );
+}
+
+function PagoItem({ k, v, mono }: { k: string; v: string; mono?: boolean }) {
+  return (
+    <div className="flex justify-between gap-3">
+      <dt className="shrink-0 text-ink-2">{k}</dt>
+      <dd className={"text-right font-semibold " + (mono ? "font-mono" : "")}>{v}</dd>
     </div>
   );
 }

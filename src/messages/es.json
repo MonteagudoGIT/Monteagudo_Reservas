@@ -259,7 +259,12 @@
     "err_tarde": "Ya no se puede cancelar: falta menos de una hora para empezar.",
     "err_noPermiso": "No puedes cancelar esta reserva.",
     "err_estado": "Esta reserva ya no se puede cancelar.",
-    "err_generic": "No se ha podido cancelar."
+    "err_generic": "No se ha podido cancelar.",
+    "transferAmount": "Importe",
+    "transferHolder": "Titular",
+    "transferConcept": "Concepto",
+    "transferDeadline": "Ingrésalo antes del {date}, o el hueco se libera.",
+    "transferNoIban": "El administrador aún no ha publicado el número de cuenta. Contacta con él para hacer el ingreso."
   },
   "sugerencias": {
     "title": "Buzón de sugerencias",

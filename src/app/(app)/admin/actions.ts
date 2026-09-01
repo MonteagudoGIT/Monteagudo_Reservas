@@ -167,6 +167,20 @@ export async function guardarFichaAction(_p: FS, fd: FormData): Promise<FS> {
   return { ok: true };
 }
 
+export async function guardarPagoAction(_p: FS, fd: FormData): Promise<FS> {
+  const s = await createClient();
+  const iban = String(fd.get("iban") ?? "").trim().replace(/\s+/g, " ") || null;
+  const titular = String(fd.get("titular_cuenta") ?? "").trim() || null;
+  const concepto = String(fd.get("concepto_pago") ?? "").trim() || null;
+  const { error } = await s
+    .from("espacios")
+    .update({ iban, titular_cuenta: titular, concepto_pago: concepto })
+    .eq("clave", "sala");
+  if (error) return { error: "No se ha podido guardar." };
+  revalidatePath("/admin/espacio");
+  return { ok: true };
+}
+
 export async function crearMantenimientoAction(_p: FS, fd: FormData): Promise<FS> {
   const s = await createClient();
   const fecha = String(fd.get("fecha") ?? "");
