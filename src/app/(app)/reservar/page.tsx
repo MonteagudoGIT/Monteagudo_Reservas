@@ -13,15 +13,17 @@ export default async function Page({
   const perfil = session!.perfil!;
   const supabase = await createClient();
 
-  const [{ data: tarifas }, { data: saldo }, { data: vivienda }] = await Promise.all([
-    supabase.from("tarifas").select("modo, precio_cent, dias_antelacion"),
-    supabase.rpc("saldo_vivienda", { p_vivienda: perfil.vivienda_id }),
-    supabase
-      .from("viviendas")
-      .select("etiqueta, bloqueada, motivo_bloqueo")
-      .eq("id", perfil.vivienda_id!)
-      .single(),
-  ]);
+  const [{ data: tarifas }, { data: saldo }, { data: vivienda }, { data: espacio }] =
+    await Promise.all([
+      supabase.from("tarifas").select("modo, precio_cent, dias_antelacion"),
+      supabase.rpc("saldo_vivienda", { p_vivienda: perfil.vivienda_id }),
+      supabase
+        .from("viviendas")
+        .select("etiqueta, bloqueada, motivo_bloqueo")
+        .eq("id", perfil.vivienda_id!)
+        .single(),
+      supabase.from("espacios").select("aforo, equipamiento, normas").eq("clave", "sala").single(),
+    ]);
 
   if (vivienda?.bloqueada) {
     const t = await getTranslations("reservar");
@@ -55,10 +57,17 @@ export default async function Page({
 
   const hiNum = sp.hi ? parseInt(sp.hi, 10) : undefined;
 
+  const ficha = {
+    aforo: espacio?.aforo ?? null,
+    equipamiento: (espacio?.equipamiento ?? []) as string[],
+    normas: espacio?.normas ?? null,
+  };
+
   return (
     <ReservarWizard
       precios={precios}
       diasAntelacion={diasAntelacion}
+      ficha={ficha}
       saldoCent={Number(saldo ?? 0)}
       vivienda={vivienda?.etiqueta ?? ""}
       nombre={perfil.nombre ?? ""}

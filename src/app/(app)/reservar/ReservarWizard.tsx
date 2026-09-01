@@ -20,12 +20,14 @@ import { SubmitButton, Alert } from "@/components/ui";
 
 type Precios = { sala: number; ping_pong: number };
 type DiasAntelacion = { sala: number; ping_pong: number };
+type Ficha = { aforo: number | null; equipamiento: string[]; normas: string | null };
 const HORAS = [10, 11, 12, 13, 14, 17, 18, 19, 20, 21, 22];
 const LOC: Record<string, string> = { es: "es-ES", en: "en-GB" };
 
 export default function ReservarWizard({
   precios,
   diasAntelacion,
+  ficha,
   saldoCent,
   vivienda,
   nombre,
@@ -34,6 +36,7 @@ export default function ReservarWizard({
 }: {
   precios: Precios;
   diasAntelacion: DiasAntelacion;
+  ficha: Ficha;
   saldoCent: number;
   vivienda: string;
   nombre: string;
@@ -203,6 +206,45 @@ export default function ReservarWizard({
               <span className="font-mono font-medium">{formatoEuros(precios[m])}</span>
             </button>
           ))}
+
+          {(ficha.aforo != null || ficha.equipamiento.length > 0 || ficha.normas) && (
+            <details className="group rounded-2xl border border-line bg-surface px-4 py-3 text-sm">
+              <summary className="flex cursor-pointer list-none items-center justify-between font-semibold">
+                {t("salaDetails")}
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--ink-3)"
+                  strokeWidth="2"
+                  className="transition-transform group-open:rotate-90"
+                  aria-hidden
+                >
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+              </summary>
+              <div className="mt-3 space-y-2 text-ink-2">
+                {ficha.aforo != null && (
+                  <p>
+                    <span className="font-medium text-ink">{t("capacity")}:</span>{" "}
+                    {t("people", { n: ficha.aforo })}
+                  </p>
+                )}
+                {ficha.equipamiento.length > 0 && (
+                  <p>
+                    <span className="font-medium text-ink">{t("equipment")}:</span>{" "}
+                    {ficha.equipamiento.join(", ")}
+                  </p>
+                )}
+                {ficha.normas && (
+                  <p className="whitespace-pre-line">
+                    <span className="font-medium text-ink">{t("rules")}:</span> {ficha.normas}
+                  </p>
+                )}
+              </div>
+            </details>
+          )}
 
           <p className="rounded-xl border border-danger/40 bg-danger-soft px-3.5 py-2.5 text-xs leading-relaxed text-danger">
             {t("payReminder")}

@@ -190,7 +190,12 @@
     "err_fecha": "Solo se puede reservar hasta 7 días vista.",
     "payReminder": "Pago por transferencia: la reserva se guarda 3 días. Si el administrador no confirma el ingreso en ese plazo, se libera automáticamente. Si cancelas una reserva ya pagada, se te devuelve el importe al saldo de la vivienda.",
     "prevMonth": "Mes anterior",
-    "nextMonth": "Mes siguiente"
+    "nextMonth": "Mes siguiente",
+    "salaDetails": "Detalles de la Sala",
+    "capacity": "Aforo",
+    "equipment": "Equipamiento",
+    "rules": "Normas",
+    "people": "{n} personas"
   },
   "myBookings": {
     "title": "Mis reservas",
