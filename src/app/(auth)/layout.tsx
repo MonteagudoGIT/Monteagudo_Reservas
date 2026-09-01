@@ -11,14 +11,14 @@ export default async function AuthLayout({
 
   return (
     <main className="flex h-full flex-col overflow-y-auto px-6">
-      <div className="mx-auto my-auto w-full max-w-sm py-10">
+      <div className="mx-auto flex min-h-full w-full max-w-sm flex-col justify-center py-8">
         <Image
           src="/monteagudo-wordmark.png"
           alt="Monteagudo"
           width={240}
           height={80}
           priority
-          className="mx-auto mb-8 h-auto w-full max-w-[15rem]"
+          className="mx-auto mb-7 h-10 w-auto"
         />
         {children}
       </div>

@@ -27,7 +27,7 @@ export default async function Home() {
   const perfil = session!.perfil!;
   const t = await getTranslations("home");
 
-  const [{ data: proxima }, { data: saldo }, { data: avisos }] = await Promise.all([
+  const [{ data: proximas }, { data: saldo }, { data: avisos }] = await Promise.all([
     supabase
       .from("reservas")
       .select("id, modo, inicio, fin, estado, aprobacion")
@@ -35,8 +35,7 @@ export default async function Home() {
       .in("estado", ["retenida", "confirmada"])
       .gte("inicio", new Date().toISOString())
       .order("inicio", { ascending: true })
-      .limit(1)
-      .maybeSingle(),
+      .limit(5),
     supabase.rpc("saldo_vivienda", { p_vivienda: perfil.vivienda_id }),
     supabase
       .from("avisos")
@@ -45,6 +44,8 @@ export default async function Home() {
       .order("publicado_en", { ascending: false })
       .limit(2),
   ]);
+
+  const reservas = proximas ?? [];
 
   return (
     <main className="flex h-full flex-col">
@@ -75,61 +76,72 @@ export default async function Home() {
         )}
       </header>
 
-      <div className="scroll-area min-h-0 flex-1 space-y-4 px-5 pb-6 pt-1">
-      <div className="rounded-2xl border border-line bg-surface p-4">
-        <span className="text-xs font-semibold uppercase tracking-[.09em] text-ink-3">
-          {t("nextBooking")}
-        </span>
-        {proxima ? (
-          <Link href={`/reserva/${proxima.id}`} className="mt-2 block">
-            <div className="text-lg font-semibold">{MODO_LABEL[proxima.modo]}</div>
-            <div className="text-sm text-ink-2">
-              {fechaLarga(proxima.inicio)} · {rango(proxima.inicio, proxima.fin)}
-            </div>
-            <div className="mt-2 text-xs font-semibold text-accent-ink">
-              {proxima.aprobacion === "pendiente"
-                ? t("st_pendiente_aprobacion")
-                : t(`st_${proxima.estado}` as "st_confirmada")}
-            </div>
+      {/* Bloques siempre visibles */}
+      <div className="shrink-0 space-y-3 px-5 pb-3 pt-1">
+        <div className="grid grid-cols-2 gap-3">
+          <Link href="/calendario" className="rounded-2xl border border-line bg-surface p-4">
+            <div className="text-sm font-semibold">{t("calendarTitle")}</div>
+            <div className="text-xs text-ink-3">{t("calendarHint")}</div>
           </Link>
-        ) : (
-          <p className="mt-2 text-sm text-ink-2">{t("noNextBooking")}</p>
-        )}
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <Link href="/calendario" className="rounded-2xl border border-line bg-surface p-4">
-          <div className="text-sm font-semibold">{t("calendarTitle")}</div>
-          <div className="text-xs text-ink-3">{t("calendarHint")}</div>
-        </Link>
-        <Link href="/mis-reservas" className="rounded-2xl border border-line bg-surface p-4">
-          <div className="text-sm font-semibold">{t("myBookingsTitle")}</div>
-          <div className="text-xs text-ink-3">{t("myBookingsHint")}</div>
-        </Link>
-      </div>
-
-      <Link
-        href="/perfil"
-        className="flex items-center justify-between rounded-2xl border border-line bg-surface px-4 py-3.5"
-      >
-        <span className="text-sm">{t("balance")}</span>
-        <span className="font-mono font-medium">{formatoEuros(Number(saldo ?? 0))}</span>
-      </Link>
-
-      {(avisos ?? []).length > 0 && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-[.09em] text-ink-3">Avisos</span>
-            <Link href="/avisos" className="text-xs font-semibold text-accent-ink">Ver todos</Link>
-          </div>
-          {avisos!.map((a) => (
-            <Link key={a.id} href="/avisos" className="block rounded-2xl border border-line bg-surface p-4">
-              <div className="text-sm font-semibold">{a.titulo}</div>
-              <div className="mt-0.5 line-clamp-2 text-xs text-ink-2">{a.cuerpo}</div>
-            </Link>
-          ))}
+          <Link href="/mis-reservas" className="rounded-2xl border border-line bg-surface p-4">
+            <div className="text-sm font-semibold">{t("myBookingsTitle")}</div>
+            <div className="text-xs text-ink-3">{t("myBookingsHint")}</div>
+          </Link>
         </div>
-      )}
+        <Link
+          href="/perfil"
+          className="flex items-center justify-between rounded-2xl border border-line bg-surface px-4 py-3.5"
+        >
+          <span className="text-sm">{t("balance")}</span>
+          <span className="font-mono font-medium">{formatoEuros(Number(saldo ?? 0))}</span>
+        </Link>
+      </div>
+
+      {/* Zona con scroll: próximas reservas y avisos */}
+      <div className="scroll-area min-h-0 flex-1 space-y-4 px-5 pb-6 pt-1">
+        <div className="space-y-2">
+          <span className="text-xs font-semibold uppercase tracking-[.09em] text-ink-3">
+            {t("nextBooking")}
+          </span>
+          {reservas.length === 0 ? (
+            <div className="rounded-2xl border border-line bg-surface p-4">
+              <p className="text-sm text-ink-2">{t("noNextBooking")}</p>
+            </div>
+          ) : (
+            reservas.map((r) => (
+              <Link
+                key={r.id}
+                href={`/reserva/${r.id}`}
+                className="block rounded-2xl border border-line bg-surface p-4"
+              >
+                <div className="text-lg font-semibold">{MODO_LABEL[r.modo]}</div>
+                <div className="text-sm text-ink-2">
+                  {fechaLarga(r.inicio)} · {rango(r.inicio, r.fin)}
+                </div>
+                <div className="mt-2 text-xs font-semibold text-accent-ink">
+                  {r.aprobacion === "pendiente"
+                    ? t("st_pendiente_aprobacion")
+                    : t(`st_${r.estado}` as "st_confirmada")}
+                </div>
+              </Link>
+            ))
+          )}
+        </div>
+
+        {(avisos ?? []).length > 0 && (
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold uppercase tracking-[.09em] text-ink-3">Avisos</span>
+              <Link href="/avisos" className="text-xs font-semibold text-accent-ink">Ver todos</Link>
+            </div>
+            {avisos!.map((a) => (
+              <Link key={a.id} href="/avisos" className="block rounded-2xl border border-line bg-surface p-4">
+                <div className="text-sm font-semibold">{a.titulo}</div>
+                <div className="mt-0.5 line-clamp-2 text-xs text-ink-2">{a.cuerpo}</div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </main>
   );
