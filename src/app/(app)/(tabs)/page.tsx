@@ -50,17 +50,14 @@ export default async function Home() {
   return (
     <main className="flex h-full flex-col">
       <header className="shrink-0 px-5 pb-3 pt-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/monteagudo-mark.png"
-              alt=""
-              width={20}
-              height={20}
-              className="h-5 w-5"
-            />
-            <span className="font-semibold tracking-tight">Monteagudo</span>
-          </div>
+        <div className="flex items-center justify-between gap-3">
+          <Image
+            src="/monteagudo-wordmark.png"
+            alt="Monteagudo"
+            width={160}
+            height={19}
+            className="h-5 w-auto"
+          />
           <LanguageSwitcher />
         </div>
         <h1 className="mt-3 text-2xl font-semibold">
