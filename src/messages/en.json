@@ -187,7 +187,10 @@
     "err_mantenimiento": "That slot is closed for maintenance.",
     "err_saldo": "Not enough balance to pay this way.",
     "err_pasado": "That time has already passed.",
-    "err_fecha": "You can only book up to 7 days ahead."
+    "err_fecha": "You can only book up to 7 days ahead.",
+    "payReminder": "Bank-transfer payment: the booking is held for 3 days. If the administrator does not confirm the payment within that time, it is released automatically. If you cancel a paid booking, the amount is refunded to your home balance.",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month"
   },
   "myBookings": {
     "title": "My bookings",

@@ -115,7 +115,8 @@ export default function CalendarioCliente({
     };
   }
 
-  const reservable = (fecha: string) => fecha >= hoy && fecha <= addDays(hoy, 7);
+  // Ventana amplia (cubre el plazo de la Sala); el asistente valida el límite real por espacio.
+  const reservable = (fecha: string) => fecha >= hoy && fecha <= addDays(hoy, 30);
 
   const step = (n: number) =>
     setRef(vista === "mes" ? addMonths(ref, n) : vista === "semana" ? addDays(ref, n * 7) : addDays(ref, n));

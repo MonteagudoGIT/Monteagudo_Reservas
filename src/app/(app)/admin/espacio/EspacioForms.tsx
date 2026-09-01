@@ -12,11 +12,15 @@ export function TarifasForm({
   pingEur,
   reqSala,
   reqPing,
+  antSala,
+  antPing,
 }: {
   salaEur: string;
   pingEur: string;
   reqSala: boolean;
   reqPing: boolean;
+  antSala: string;
+  antPing: string;
 }) {
   const [state, action] = useActionState<FS, FormData>(guardarTarifasAction, initial);
   return (
@@ -42,6 +46,16 @@ export function TarifasForm({
         <input type="checkbox" name="req_ping" defaultChecked={reqPing} className="size-4" style={{ accentColor: "var(--accent)" }} />
         Las reservas de Ping Pong requieren mi visto bueno
       </label>
+
+      <div className="flex gap-3">
+        <Field label="Antelación Sala (días)" htmlFor="ant_sala">
+          <TextInput id="ant_sala" name="ant_sala" defaultValue={antSala} inputMode="numeric" required />
+        </Field>
+        <Field label="Antelación Ping Pong (días)" htmlFor="ant_ping">
+          <TextInput id="ant_ping" name="ant_ping" defaultValue={antPing} inputMode="numeric" required />
+        </Field>
+      </div>
+      <p className="-mt-2 text-xs text-ink-3">Con cuántos días de antelación como máximo se puede reservar (1–120).</p>
 
       <SubmitButton>Guardar tarifas</SubmitButton>
     </form>

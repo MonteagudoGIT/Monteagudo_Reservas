@@ -14,7 +14,7 @@ export default async function Page({
   const supabase = await createClient();
 
   const [{ data: tarifas }, { data: saldo }, { data: vivienda }] = await Promise.all([
-    supabase.from("tarifas").select("modo, precio_cent"),
+    supabase.from("tarifas").select("modo, precio_cent, dias_antelacion"),
     supabase.rpc("saldo_vivienda", { p_vivienda: perfil.vivienda_id }),
     supabase
       .from("viviendas")
@@ -48,12 +48,17 @@ export default async function Page({
     sala: tarifas?.find((t) => t.modo === "sala")?.precio_cent ?? 0,
     ping_pong: tarifas?.find((t) => t.modo === "ping_pong")?.precio_cent ?? 0,
   };
+  const diasAntelacion = {
+    sala: tarifas?.find((t) => t.modo === "sala")?.dias_antelacion ?? 7,
+    ping_pong: tarifas?.find((t) => t.modo === "ping_pong")?.dias_antelacion ?? 7,
+  };
 
   const hiNum = sp.hi ? parseInt(sp.hi, 10) : undefined;
 
   return (
     <ReservarWizard
       precios={precios}
+      diasAntelacion={diasAntelacion}
       saldoCent={Number(saldo ?? 0)}
       vivienda={vivienda?.etiqueta ?? ""}
       nombre={perfil.nombre ?? ""}

@@ -3,6 +3,8 @@ export type Modo = (typeof MODOS)[number];
 
 export const TZ = "Europe/Madrid";
 export const HORIZONTE_DIAS = 7;
+/** Tope duro para la vista de calendario (cubre el mayor plazo configurable razonable). */
+export const HORIZONTE_MAX = 60;
 
 /** Bandas de apertura: [horaInicio, horaFinExclusiva]. Siesta 15–17 cerrada. */
 export const BANDAS: ReadonlyArray<readonly [number, number]> = [
@@ -65,14 +67,54 @@ export function hoyMadridISO(): string {
   return isoEnMadrid(new Date());
 }
 
-/** Días reservables: hoy + 7. */
-export function diasReservables(): { iso: string; date: Date }[] {
+/** Días reservables: hoy + `dias` (por defecto 7). */
+export function diasReservables(dias = HORIZONTE_DIAS): { iso: string; date: Date }[] {
   const base = new Date(hoyMadridISO() + "T12:00:00Z");
   const out: { iso: string; date: Date }[] = [];
-  for (let i = 0; i <= HORIZONTE_DIAS; i++) {
+  for (let i = 0; i <= dias; i++) {
     const d = new Date(base);
     d.setUTCDate(base.getUTCDate() + i);
     out.push({ iso: isoEnMadrid(d), date: d });
+  }
+  return out;
+}
+
+/** Suma `n` días a una fecha ISO (yyyy-mm-dd), devuelve ISO. */
+export function sumarDias(iso: string, n: number): string {
+  const d = new Date(iso + "T12:00:00Z");
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}
+
+/** Primer día (ISO) del mes que contiene `iso`. */
+export function primerDiaMes(iso: string): string {
+  return iso.slice(0, 8) + "01";
+}
+
+/** Suma `n` meses al mes de `iso`, devuelve el día 1 del mes resultante. */
+export function sumarMeses(iso: string, n: number): string {
+  const d = new Date(iso + "T12:00:00Z");
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + n, 1, 12))
+    .toISOString()
+    .slice(0, 10);
+}
+
+/**
+ * Rejilla de un mes (6 filas × 7 = 42 celdas), empezando en lunes.
+ * `iso` es cualquier día del mes objetivo.
+ */
+export function celdasDeMes(iso: string): { iso: string; otroMes: boolean }[] {
+  const d = new Date(primerDiaMes(iso) + "T12:00:00Z");
+  const y = d.getUTCFullYear();
+  const m = d.getUTCMonth();
+  const offset = (new Date(Date.UTC(y, m, 1, 12)).getUTCDay() + 6) % 7; // 0 = lunes
+  const inicio = new Date(Date.UTC(y, m, 1 - offset, 12));
+  const out: { iso: string; otroMes: boolean }[] = [];
+  for (let i = 0; i < 42; i++) {
+    const c = new Date(inicio);
+    c.setUTCDate(inicio.getUTCDate() + i);
+    const ci = c.toISOString().slice(0, 10);
+    out.push({ iso: ci, otroMes: c.getUTCMonth() !== m });
   }
   return out;
 }

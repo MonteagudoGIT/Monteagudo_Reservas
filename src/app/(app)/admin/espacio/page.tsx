@@ -7,7 +7,7 @@ const eur = (cent: number) => (cent / 100).toFixed(2).replace(".", ",");
 export default async function Page() {
   const supabase = await createClient();
   const [{ data: tarifas }, { data: esp }] = await Promise.all([
-    supabase.from("tarifas").select("modo, precio_cent, requiere_aprobacion"),
+    supabase.from("tarifas").select("modo, precio_cent, requiere_aprobacion, dias_antelacion"),
     supabase.from("espacios").select("aforo, equipamiento, normas").eq("clave", "sala").single(),
   ]);
 
@@ -24,6 +24,8 @@ export default async function Page() {
           pingEur={eur(ping?.precio_cent ?? 0)}
           reqSala={!!sala?.requiere_aprobacion}
           reqPing={!!ping?.requiere_aprobacion}
+          antSala={String(sala?.dias_antelacion ?? 30)}
+          antPing={String(ping?.dias_antelacion ?? 7)}
         />
         <FichaForm
           aforo={esp?.aforo != null ? String(esp.aforo) : ""}

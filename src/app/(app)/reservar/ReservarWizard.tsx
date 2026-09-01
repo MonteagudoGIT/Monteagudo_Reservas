@@ -5,23 +5,27 @@ import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import {
   type Modo,
-  diasReservables,
+  celdasDeMes,
   franjasDe,
   formatoEuros,
   horarioValido,
   hoyMadridISO,
-  nombreDiaCorto,
   nombreDiaLargo,
+  primerDiaMes,
+  sumarDias,
+  sumarMeses,
 } from "@/lib/reservas";
-import { crearReservaAction, horasOcupadas, type CrearState } from "./actions";
+import { crearReservaAction, diasConReserva, horasOcupadas, type CrearState } from "./actions";
 import { SubmitButton, Alert } from "@/components/ui";
 
 type Precios = { sala: number; ping_pong: number };
+type DiasAntelacion = { sala: number; ping_pong: number };
 const HORAS = [10, 11, 12, 13, 14, 17, 18, 19, 20, 21, 22];
 const LOC: Record<string, string> = { es: "es-ES", en: "en-GB" };
 
 export default function ReservarWizard({
   precios,
+  diasAntelacion,
   saldoCent,
   vivienda,
   nombre,
@@ -29,6 +33,7 @@ export default function ReservarWizard({
   hiInicial,
 }: {
   precios: Precios;
+  diasAntelacion: DiasAntelacion;
   saldoCent: number;
   vivienda: string;
   nombre: string;
@@ -39,10 +44,12 @@ export default function ReservarWizard({
   const tSpace = useTranslations("space");
   const loc = LOC[useLocale()] ?? "es-ES";
 
-  const dias = useMemo(() => diasReservables(), []);
+  const hoy = hoyMadridISO();
   const [paso, setPaso] = useState(1);
   const [modo, setModo] = useState<Modo | null>(null);
-  const [fecha, setFecha] = useState<string>(fechaInicial ?? hoyMadridISO());
+  const [fecha, setFecha] = useState<string>(fechaInicial ?? hoy);
+  const [mesRef, setMesRef] = useState<string>(primerDiaMes(fechaInicial ?? hoy));
+  const [diasReserva, setDiasReserva] = useState<string[]>([]);
   const [hi, setHi] = useState<number | null>(null);
   const [dur, setDur] = useState(1);
   const [porHoras, setPorHoras] = useState(false);
@@ -51,6 +58,9 @@ export default function ReservarWizard({
 
   const [state, formAction] = useActionState<CrearState, FormData>(crearReservaAction, {});
 
+  const limiteISO = sumarDias(hoy, modo ? diasAntelacion[modo] : 7);
+
+  // Ocupación horaria del día elegido
   useEffect(() => {
     setCargando(true);
     setHi(null);
@@ -59,6 +69,23 @@ export default function ReservarWizard({
       .then(setOcupadas)
       .finally(() => setCargando(false));
   }, [fecha]);
+
+  // Puntos del calendario: días con reserva en el mes visible
+  useEffect(() => {
+    const celdas = celdasDeMes(mesRef);
+    diasConReserva(celdas[0].iso, celdas[41].iso).then(setDiasReserva);
+  }, [mesRef]);
+
+  // Al elegir espacio: encajar la fecha en el nuevo plazo y centrar el calendario
+  useEffect(() => {
+    if (!modo) return;
+    const tope = sumarDias(hoy, diasAntelacion[modo]);
+    if (fecha < hoy || fecha > tope) {
+      setFecha(hoy);
+      setMesRef(primerDiaMes(hoy));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [modo]);
 
   useEffect(() => {
     if (modo != null && hiInicial != null && !ocupadas.includes(hiInicial)) {
@@ -91,6 +118,30 @@ export default function ReservarWizard({
   const saldoAlcanza = saldoCent >= precio;
   const seleccionado = (h: number) => hi != null && hf != null && h >= hi && h < hf;
 
+  // --- Calendario ---
+  const DOW = useMemo(() => {
+    const base = new Date(Date.UTC(2024, 0, 1)); // lunes
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(base);
+      d.setUTCDate(1 + i);
+      return d.toLocaleDateString(loc, { weekday: "narrow", timeZone: "UTC" });
+    });
+  }, [loc]);
+  const celdas = useMemo(() => celdasDeMes(mesRef), [mesRef]);
+  const mesLargo = new Date(mesRef + "T12:00:00Z").toLocaleDateString(loc, {
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+  const puedePrev = primerDiaMes(mesRef) > primerDiaMes(hoy);
+  const puedeNext = primerDiaMes(mesRef) < primerDiaMes(limiteISO);
+  const fechaCorta = new Date(fecha + "T12:00:00Z").toLocaleDateString(loc, {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    timeZone: "UTC",
+  });
+
   return (
     <main className="mx-auto flex h-full w-full max-w-md flex-col overflow-hidden">
       {/* ---- Cabecera de pasos (fija) ---- */}
@@ -98,19 +149,27 @@ export default function ReservarWizard({
         <div className="flex items-center gap-3.5">
           <button
             onClick={() => (paso > 1 ? setPaso(paso - 1) : history.back())}
-            className="flex size-9 items-center justify-center rounded-full border border-line-strong bg-surface"
+            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-line-strong bg-surface"
             aria-label="Atrás"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
               <path d="M15 5l-7 7 7 7" />
             </svg>
           </button>
-          <div>
+          <div className="min-w-0 flex-1">
             <div className="text-xs font-semibold uppercase tracking-[.08em] text-ink-3">{t("eyebrow")}</div>
             <div className="font-semibold">
               {t("step", { n: paso, name: t((["s1", "s2", "s3"] as const)[paso - 1]) })}
             </div>
           </div>
+          {paso === 2 && (
+            <div className="shrink-0 text-right">
+              <div className="text-[0.68rem] font-semibold uppercase tracking-[.06em] text-ink-3">
+                {t("day")}
+              </div>
+              <div className="text-sm font-semibold capitalize">{fechaCorta}</div>
+            </div>
+          )}
         </div>
         <div className="mb-1 mt-3 flex gap-1.5">
           {[1, 2, 3].map((n) => (
@@ -144,7 +203,12 @@ export default function ReservarWizard({
               <span className="font-mono font-medium">{formatoEuros(precios[m])}</span>
             </button>
           ))}
-          <Link href="/" className="mt-auto pt-4 text-center text-xs font-semibold text-accent-ink">
+
+          <p className="rounded-xl border border-danger/40 bg-danger-soft px-3.5 py-2.5 text-xs leading-relaxed text-danger">
+            {t("payReminder")}
+          </p>
+
+          <Link href="/" className="mt-auto pt-2 text-center text-xs font-semibold text-accent-ink">
             {t("cancel")}
           </Link>
         </div>
@@ -153,29 +217,68 @@ export default function ReservarWizard({
       {/* ---- PASO 2 · Día y hora ---- */}
       {paso === 2 && modo && (
         <>
-          {/* Tira de días (fija) */}
-          <div className="shrink-0 border-b border-line bg-ground px-5 pb-2 pt-2">
-            <div className="flex gap-2 overflow-x-auto">
-              {dias.map(({ iso }, i) => {
-                const { dow, dia } = nombreDiaCorto(iso, loc);
+          {/* Minicalendario (fijo) */}
+          <div className="shrink-0 border-b border-line bg-ground px-5 pb-3 pt-2">
+            <div className="flex items-center justify-between">
+              <button
+                onClick={() => setMesRef(sumarMeses(mesRef, -1))}
+                disabled={!puedePrev}
+                aria-label={t("prevMonth")}
+                className="flex size-8 items-center justify-center rounded-lg text-ink-2 disabled:opacity-30"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M15 5l-7 7 7 7" />
+                </svg>
+              </button>
+              <span className="text-sm font-semibold capitalize">{mesLargo}</span>
+              <button
+                onClick={() => setMesRef(sumarMeses(mesRef, 1))}
+                disabled={!puedeNext}
+                aria-label={t("nextMonth")}
+                className="flex size-8 items-center justify-center rounded-lg text-ink-2 disabled:opacity-30"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="mt-1 grid grid-cols-7 text-center text-[0.68rem] uppercase text-ink-3">
+              {DOW.map((d, i) => (
+                <span key={i}>{d}</span>
+              ))}
+            </div>
+            <div className="mt-1 grid grid-cols-7 gap-1">
+              {celdas.map(({ iso, otroMes }) => {
+                const fuera = iso < hoy || iso > limiteISO;
                 const sel = iso === fecha;
+                const conReserva = diasReserva.includes(iso);
                 return (
                   <button
                     key={iso}
-                    onClick={() => setFecha(iso)}
+                    disabled={fuera}
+                    onClick={() => {
+                      setFecha(iso);
+                      if (otroMes) setMesRef(primerDiaMes(iso));
+                    }}
                     className={
-                      "flex min-w-11 flex-col items-center gap-0.5 rounded-xl border px-1.5 py-2 " +
-                      (sel ? "border-2 border-accent bg-accent-soft" : "border-line bg-surface")
+                      "relative flex h-9 items-center justify-center rounded-lg text-sm " +
+                      (sel
+                        ? "bg-accent font-bold text-white"
+                        : fuera
+                          ? "text-ink-3/40"
+                          : otroMes
+                            ? "text-ink-3 hover:bg-surface-2"
+                            : "font-medium hover:bg-surface-2")
                     }
                   >
-                    <span className="text-[0.72rem] capitalize text-ink-3">{i === 0 ? t("today") : dow}</span>
-                    <span className="text-sm font-semibold">{dia}</span>
+                    {Number(iso.slice(8, 10))}
+                    {conReserva && !sel && (
+                      <span className="absolute bottom-1 size-1 rounded-full bg-amber" />
+                    )}
                   </button>
                 );
               })}
-            </div>
-            <div className="mt-1.5 text-xs font-semibold uppercase tracking-[.06em] text-ink-3">
-              <span className="capitalize">{nombreDiaLargo(fecha, loc)}</span>
             </div>
           </div>
 
@@ -187,6 +290,7 @@ export default function ReservarWizard({
                   const ok = rangoLibre(f.inicio, f.fin - f.inicio);
                   const label =
                     f.clave === "manana" ? t("manana") : f.clave === "tarde" ? t("tarde") : t("diaCompleto");
+                  const activa = hi === f.inicio && f.fin - f.inicio === dur && !porHoras;
                   return (
                     <button
                       key={f.clave}
@@ -197,17 +301,18 @@ export default function ReservarWizard({
                         setPorHoras(false);
                       }}
                       className={
-                        "flex-1 rounded-xl border px-2 py-2 text-center text-sm font-semibold " +
-                        (hi === f.inicio && f.fin - f.inicio === dur && !porHoras
-                          ? "border-2 border-accent bg-accent-soft"
+                        "flex flex-1 flex-col items-center rounded-lg border px-2 py-1.5 text-xs font-semibold " +
+                        (activa
+                          ? "border-accent bg-accent-soft"
                           : ok
                             ? "border-line bg-surface"
                             : "border-line bg-surface-2 text-ink-3")
                       }
                     >
                       {label}
-                      <br />
-                      <span className="text-xs font-normal">{ok ? `${f.inicio}–${f.fin}` : t("busy")}</span>
+                      <span className="text-[0.65rem] font-normal text-ink-3">
+                        {ok ? `${f.inicio}–${f.fin}` : t("busy")}
+                      </span>
                     </button>
                   );
                 })}

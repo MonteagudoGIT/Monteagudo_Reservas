@@ -7,7 +7,7 @@ import { horaMadrid } from "@/lib/reservas";
 
 const MSG: Record<string, string> = {
   IMPAGO: "Tu vivienda está bloqueada por impago. Contacta con el administrador.",
-  FECHA: "Solo se puede reservar hasta 7 días vista.",
+  FECHA: "Esa fecha está fuera del plazo de reserva.",
   HORARIO: "Ese horario no es válido.",
   PASADO: "Esa hora ya ha pasado.",
   SALDO: "No hay saldo suficiente para pagar así.",
@@ -55,6 +55,19 @@ export async function crearReservaAction(
   revalidatePath("/mis-reservas");
   revalidatePath("/calendario");
   redirect(`/reserva/${data as string}?nueva=1`);
+}
+
+/** Fechas (ISO) entre `desde` y `hasta` con al menos una reserva activa. Para los puntos del calendario. */
+export async function diasConReserva(desde: string, hasta: string): Promise<string[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("reservas")
+    .select("fecha")
+    .gte("fecha", desde)
+    .lte("fecha", hasta)
+    .in("estado", ["retenida", "confirmada", "completada"])
+    .neq("aprobacion", "rechazada");
+  return [...new Set((data ?? []).map((r) => r.fecha as string))];
 }
 
 /** Horas de inicio (10–22) ya ocupadas ese día por reservas activas o mantenimiento. */

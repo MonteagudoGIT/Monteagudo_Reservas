@@ -132,12 +132,17 @@ export async function guardarTarifasAction(_p: FS, fd: FormData): Promise<FS> {
   if (!Number.isFinite(sala) || !Number.isFinite(ping) || sala < 0 || ping < 0) {
     return { error: "Precios no válidos." };
   }
+  const antSala = Math.round(Number(fd.get("ant_sala")));
+  const antPing = Math.round(Number(fd.get("ant_ping")));
+  if (![antSala, antPing].every((n) => Number.isFinite(n) && n >= 1 && n <= 120)) {
+    return { error: "La antelación debe estar entre 1 y 120 días." };
+  }
   const { data: esp } = await s.from("espacios").select("id").eq("clave", "sala").single();
   const now = new Date().toISOString();
   const { error } = await s.from("tarifas").upsert(
     [
-      { espacio_id: esp!.id, modo: "sala", precio_cent: sala, requiere_aprobacion: fd.get("req_sala") === "on", actualizado_en: now },
-      { espacio_id: esp!.id, modo: "ping_pong", precio_cent: ping, requiere_aprobacion: fd.get("req_ping") === "on", actualizado_en: now },
+      { espacio_id: esp!.id, modo: "sala", precio_cent: sala, requiere_aprobacion: fd.get("req_sala") === "on", dias_antelacion: antSala, actualizado_en: now },
+      { espacio_id: esp!.id, modo: "ping_pong", precio_cent: ping, requiere_aprobacion: fd.get("req_ping") === "on", dias_antelacion: antPing, actualizado_en: now },
     ],
     { onConflict: "espacio_id,modo" },
   );
