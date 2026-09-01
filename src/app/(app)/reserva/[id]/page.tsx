@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
-import { formatoEuros } from "@/lib/reservas";
+import { formatoEuros, nombreCorto } from "@/lib/reservas";
 import { EstadoPill, CancelarReserva } from "@/components/reserva-ui";
 import { Alert } from "@/components/ui";
 
@@ -27,7 +27,7 @@ export default async function Page({
   const { data: r } = await supabase
     .from("reservas")
     .select(
-      "id, modo, tipo_reserva, vivienda_id, fecha, inicio, fin, estado, aprobacion, importe_cent, metodo_pago, referencia_transferencia, retenida_hasta, creada_por_admin",
+      "id, modo, tipo_reserva, vivienda_id, usuario_id, fecha, inicio, fin, estado, aprobacion, importe_cent, metodo_pago, referencia_transferencia, retenida_hasta, creada_por_admin",
     )
     .eq("id", id)
     .maybeSingle();
@@ -36,12 +36,19 @@ export default async function Page({
 
   const pendienteTransferencia = r.estado === "retenida" && r.metodo_pago === "transferencia";
 
-  const [{ data: pago }, { data: viv }] = pendienteTransferencia
-    ? await Promise.all([
-        supabase.from("espacios").select("iban, titular_cuenta, concepto_pago").eq("clave", "sala").single(),
-        supabase.from("viviendas").select("etiqueta").eq("id", r.vivienda_id!).maybeSingle(),
-      ])
-    : [{ data: null }, { data: null }];
+  const [{ data: viv }, { data: reservador }, { data: pago }] = await Promise.all([
+    supabase.from("viviendas").select("etiqueta").eq("id", r.vivienda_id!).maybeSingle(),
+    r.usuario_id
+      ? supabase.from("perfiles").select("nombre, apellidos").eq("id", r.usuario_id).maybeSingle()
+      : Promise.resolve({ data: null }),
+    pendienteTransferencia
+      ? supabase.from("espacios").select("iban, titular_cuenta, concepto_pago").eq("clave", "sala").single()
+      : Promise.resolve({ data: null }),
+  ]);
+
+  const reservadoPor = r.creada_por_admin
+    ? t("bookedByAdmin")
+    : nombreCorto(reservador?.nombre, reservador?.apellidos);
 
   const conceptoPago = (pago?.concepto_pago ?? "Reserva {espacio} {fecha}")
     .replace("{espacio}", r.modo === "ping_pong" ? "Ping Pong" : "Sala")
@@ -89,6 +96,8 @@ export default async function Page({
           />
           <Item k={t("amount")} v={formatoEuros(r.importe_cent)} />
           {r.metodo_pago ? <Item k={t("payment")} v={t(`method_${r.metodo_pago}` as "method_saldo")} /> : null}
+          {viv?.etiqueta ? <Item k={t("homeLabel")} v={viv.etiqueta} /> : null}
+          {reservadoPor ? <Item k={t("bookedBy")} v={reservadoPor} /> : null}
         </dl>
       </div>
 

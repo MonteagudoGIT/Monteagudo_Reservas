@@ -264,7 +264,10 @@
     "transferHolder": "Account holder",
     "transferConcept": "Reference",
     "transferDeadline": "Pay before {date}, or the slot is released.",
-    "transferNoIban": "The administrator has not published the account number yet. Contact them to pay."
+    "transferNoIban": "The administrator has not published the account number yet. Contact them to pay.",
+    "homeLabel": "Home",
+    "bookedBy": "Booked by",
+    "bookedByAdmin": "Managed by admin"
   },
   "sugerencias": {
     "title": "Suggestion box",

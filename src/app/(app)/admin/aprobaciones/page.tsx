@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { nombresDe } from "@/lib/nombres";
 import { VolverPanel, AccionBtn } from "@/components/admin-ui";
 import { aprobarReserva, rechazarReserva } from "../actions";
 
@@ -19,9 +20,11 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("reservas")
-    .select("id, modo, tipo_reserva, inicio, importe_cent, estado, viviendas(etiqueta)")
+    .select("id, modo, tipo_reserva, inicio, importe_cent, estado, usuario_id, viviendas(etiqueta)")
     .eq("aprobacion", "pendiente")
     .order("inicio", { ascending: true });
+
+  const nombres = await nombresDe(supabase, data);
 
   return (
     <div>
@@ -39,11 +42,13 @@ export default async function Page() {
         )}
         {(data ?? []).map((r) => {
           const viv = Array.isArray(r.viviendas) ? r.viviendas[0] : r.viviendas;
+          const quien = r.usuario_id ? nombres[r.usuario_id] : "";
           return (
             <div key={r.id} className="rounded-xl border border-line bg-surface p-4">
               <div className="font-semibold">
                 {MODO[r.modo]}
                 {r.tipo_reserva === "junta" ? " · Junta de vecinos (gratis)" : ""} · {viv?.etiqueta ?? "—"}
+                {quien ? ` · ${quien}` : ""}
               </div>
               <div className="mt-1 text-sm capitalize text-ink-2">{cuando(r.inicio)}</div>
               <div className="mt-3 flex items-center justify-end gap-2">

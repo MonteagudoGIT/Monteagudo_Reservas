@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
-import { hoyMadridISO } from "@/lib/reservas";
+import { hoyMadridISO, nombreCorto } from "@/lib/reservas";
 import CalendarioCliente from "./CalendarioCliente";
 
 function addDaysISO(iso: string, n: number) {
@@ -17,22 +17,37 @@ export default async function Page() {
   const desde = addDaysISO(hoy, -3);
   const hasta = addDaysISO(hoy, 45);
 
-  const [{ data: reservas }, { data: mant }] = await Promise.all([
-    supabase
-      .from("reservas")
-      .select("id, modo, fecha, inicio, fin, vivienda_id, estado, aprobacion")
-      .gte("fecha", desde)
-      .lte("fecha", hasta)
-      .in("estado", ["retenida", "confirmada", "completada"])
-      .neq("aprobacion", "rechazada"),
-    supabase.from("bloqueos_mantenimiento").select("inicio, fin, motivo"),
-  ]);
+  const miVivienda = session!.perfil!.vivienda_id ?? "";
+
+  const [{ data: reservas }, { data: mant }, { data: viviendas }, { data: convivientes }] =
+    await Promise.all([
+      supabase
+        .from("reservas")
+        .select("id, modo, fecha, inicio, fin, vivienda_id, usuario_id, estado, aprobacion")
+        .gte("fecha", desde)
+        .lte("fecha", hasta)
+        .in("estado", ["retenida", "confirmada", "completada"])
+        .neq("aprobacion", "rechazada"),
+      supabase.from("bloqueos_mantenimiento").select("inicio, fin, motivo"),
+      supabase.from("viviendas").select("id, etiqueta"),
+      supabase.from("perfiles").select("id, nombre, apellidos").eq("vivienda_id", miVivienda),
+    ]);
+
+  const etiquetas: Record<string, string> = {};
+  for (const v of viviendas ?? []) etiquetas[v.id] = v.etiqueta;
+
+  const nombres: Record<string, string> = {};
+  for (const p of convivientes ?? []) {
+    nombres[p.id] = nombreCorto(p.nombre, p.apellidos);
+  }
 
   return (
     <CalendarioCliente
       reservas={reservas ?? []}
       mantenimiento={mant ?? []}
-      miVivienda={session!.perfil!.vivienda_id ?? ""}
+      miVivienda={miVivienda}
+      etiquetas={etiquetas}
+      nombres={nombres}
       hoy={hoy}
     />
   );

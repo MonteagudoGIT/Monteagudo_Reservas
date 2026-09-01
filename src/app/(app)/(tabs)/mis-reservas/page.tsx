@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
+import { nombreCorto } from "@/lib/reservas";
 import { EstadoPill } from "@/components/reserva-ui";
 
 const LOC: Record<string, string> = { es: "es-ES", en: "en-GB" };
@@ -14,22 +15,33 @@ export default async function Page() {
   const loc = LOC[await getLocale()] ?? "es-ES";
   const ahora = new Date().toISOString();
 
-  const [{ data: proximas }, { data: historial }] = await Promise.all([
-    supabase
-      .from("reservas")
-      .select("id, modo, inicio, fin, estado, aprobacion, importe_cent")
-      .eq("vivienda_id", session!.perfil!.vivienda_id!)
-      .gte("fin", ahora)
-      .not("estado", "in", "(cancelada,caducada)")
-      .order("inicio", { ascending: true }),
-    supabase
-      .from("reservas")
-      .select("id, modo, inicio, fin, estado, aprobacion")
-      .eq("vivienda_id", session!.perfil!.vivienda_id!)
-      .or(`fin.lt.${ahora},estado.in.(cancelada,caducada)`)
-      .order("inicio", { ascending: false })
-      .limit(30),
-  ]);
+  const miVivienda = session!.perfil!.vivienda_id!;
+
+  const [{ data: proximas }, { data: historial }, { data: vivienda }, { data: convivientes }] =
+    await Promise.all([
+      supabase
+        .from("reservas")
+        .select("id, modo, inicio, fin, estado, aprobacion, importe_cent, usuario_id")
+        .eq("vivienda_id", miVivienda)
+        .gte("fin", ahora)
+        .not("estado", "in", "(cancelada,caducada)")
+        .order("inicio", { ascending: true }),
+      supabase
+        .from("reservas")
+        .select("id, modo, inicio, fin, estado, aprobacion, usuario_id")
+        .eq("vivienda_id", miVivienda)
+        .or(`fin.lt.${ahora},estado.in.(cancelada,caducada)`)
+        .order("inicio", { ascending: false })
+        .limit(30),
+      supabase.from("viviendas").select("etiqueta").eq("id", miVivienda).maybeSingle(),
+      supabase.from("perfiles").select("id, nombre, apellidos").eq("vivienda_id", miVivienda),
+    ]);
+
+  const piso = vivienda?.etiqueta ?? "";
+  const nombres: Record<string, string> = {};
+  for (const p of convivientes ?? []) nombres[p.id] = nombreCorto(p.nombre, p.apellidos);
+  const quien = (uid: string | null) =>
+    [piso, uid ? nombres[uid] : ""].filter(Boolean).join(" · ");
 
   const fecha = (iso: string) =>
     new Date(iso).toLocaleDateString(loc, {
@@ -52,6 +64,9 @@ export default async function Page() {
       <div className="mt-1 text-sm text-ink-2">
         {fecha(r.inicio)} · {rango(r.inicio, r.fin)}
       </div>
+      {quien(r.usuario_id) ? (
+        <div className="mt-0.5 text-xs text-ink-3">{quien(r.usuario_id)}</div>
+      ) : null}
     </Link>
   );
 
@@ -107,4 +122,5 @@ type ReservaCard = {
   fin: string;
   estado: string;
   aprobacion: string;
+  usuario_id: string | null;
 };

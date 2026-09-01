@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { formatoEuros } from "@/lib/reservas";
+import { nombresDe } from "@/lib/nombres";
 import { VolverPanel, AccionBtn } from "@/components/admin-ui";
 import { validarTransferencia, cancelarReservaAdmin } from "../actions";
 
@@ -20,10 +21,12 @@ export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("reservas")
-    .select("id, modo, inicio, fin, importe_cent, referencia_transferencia, retenida_hasta, vivienda_id, viviendas(etiqueta)")
+    .select("id, modo, inicio, fin, importe_cent, referencia_transferencia, retenida_hasta, vivienda_id, usuario_id, viviendas(etiqueta)")
     .eq("estado", "retenida")
     .eq("metodo_pago", "transferencia")
     .order("retenida_hasta", { ascending: true });
+
+  const nombres = await nombresDe(supabase, data);
 
   return (
     <div>
@@ -41,11 +44,13 @@ export default async function Page() {
         )}
         {(data ?? []).map((r) => {
           const viv = Array.isArray(r.viviendas) ? r.viviendas[0] : r.viviendas;
+          const quien = r.usuario_id ? nombres[r.usuario_id] : "";
           return (
             <div key={r.id} className="rounded-xl border border-line bg-surface p-4">
               <div className="flex items-center justify-between">
                 <span className="font-semibold">
                   {MODO[r.modo]} · {viv?.etiqueta ?? "—"}
+                  {quien ? ` · ${quien}` : ""}
                 </span>
                 <span className="font-mono font-semibold">{formatoEuros(r.importe_cent)}</span>
               </div>

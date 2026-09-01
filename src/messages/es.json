@@ -264,7 +264,10 @@
     "transferHolder": "Titular",
     "transferConcept": "Concepto",
     "transferDeadline": "Ingrésalo antes del {date}, o el hueco se libera.",
-    "transferNoIban": "El administrador aún no ha publicado el número de cuenta. Contacta con él para hacer el ingreso."
+    "transferNoIban": "El administrador aún no ha publicado el número de cuenta. Contacta con él para hacer el ingreso.",
+    "homeLabel": "Vivienda",
+    "bookedBy": "Reservado por",
+    "bookedByAdmin": "Gestión administración"
   },
   "sugerencias": {
     "title": "Buzón de sugerencias",

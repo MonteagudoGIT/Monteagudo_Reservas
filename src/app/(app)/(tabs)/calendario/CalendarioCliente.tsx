@@ -14,6 +14,7 @@ type Reserva = {
   inicio: string;
   fin: string;
   vivienda_id: string;
+  usuario_id: string | null;
   estado: string;
   aprobacion: string;
 };
@@ -65,11 +66,17 @@ export default function CalendarioCliente({
   reservas,
   mantenimiento,
   miVivienda,
+  etiquetas,
+  nombres,
+  verNombres = false,
   hoy,
 }: {
   reservas: Reserva[];
   mantenimiento: Mant[];
   miVivienda: string;
+  etiquetas: Record<string, string>;
+  nombres: Record<string, string>;
+  verNombres?: boolean;
   hoy: string;
 }) {
   const t = useTranslations("calendar");
@@ -249,6 +256,9 @@ export default function CalendarioCliente({
           reservas={porFecha.get(ref) ?? []}
           mant={mantPorFecha.get(ref) ?? []}
           miVivienda={miVivienda}
+          etiquetas={etiquetas}
+          nombres={nombres}
+          verNombres={verNombres}
           reservable={reservable(ref)}
         />
       )}
@@ -263,12 +273,18 @@ function Timeline({
   reservas,
   mant,
   miVivienda,
+  etiquetas,
+  nombres,
+  verNombres,
   reservable,
 }: {
   fecha: string;
   reservas: Reserva[];
   mant: Mant[];
   miVivienda: string;
+  etiquetas: Record<string, string>;
+  nombres: Record<string, string>;
+  verNombres: boolean;
   reservable: boolean;
 }) {
   const t = useTranslations("calendar");
@@ -312,7 +328,12 @@ function Timeline({
                   >
                     <span className="font-semibold">
                       {tSpace(r.modo === "ping_pong" ? "ping_pong" : "sala")}
-                      {r.vivienda_id === miVivienda ? ` · ${t("you")}` : ""}
+                      {etiquetas[r.vivienda_id] ? ` · ${etiquetas[r.vivienda_id]}` : ""}
+                      {(verNombres || r.vivienda_id === miVivienda) &&
+                      r.usuario_id &&
+                      nombres[r.usuario_id]
+                        ? ` · ${nombres[r.usuario_id]}`
+                        : ""}
                     </span>
                   </div>
                 ) : reservable ? (

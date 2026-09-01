@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
-import { hoyMadridISO } from "@/lib/reservas";
+import { hoyMadridISO, nombreCorto } from "@/lib/reservas";
 import { VolverPanel } from "@/components/admin-ui";
 import CalendarioCliente from "@/app/(app)/(tabs)/calendario/CalendarioCliente";
 
@@ -15,16 +15,24 @@ export default async function Page() {
   const supabase = await createClient();
   const hoy = hoyMadridISO();
 
-  const [{ data: reservas }, { data: mant }] = await Promise.all([
-    supabase
-      .from("reservas")
-      .select("id, modo, fecha, inicio, fin, vivienda_id, estado, aprobacion")
-      .gte("fecha", addDaysISO(hoy, -30))
-      .lte("fecha", addDaysISO(hoy, 45))
-      .in("estado", ["retenida", "confirmada", "completada"])
-      .neq("aprobacion", "rechazada"),
-    supabase.from("bloqueos_mantenimiento").select("inicio, fin, motivo"),
-  ]);
+  const [{ data: reservas }, { data: mant }, { data: viviendas }, { data: perfiles }] =
+    await Promise.all([
+      supabase
+        .from("reservas")
+        .select("id, modo, fecha, inicio, fin, vivienda_id, usuario_id, estado, aprobacion")
+        .gte("fecha", addDaysISO(hoy, -30))
+        .lte("fecha", addDaysISO(hoy, 45))
+        .in("estado", ["retenida", "confirmada", "completada"])
+        .neq("aprobacion", "rechazada"),
+      supabase.from("bloqueos_mantenimiento").select("inicio, fin, motivo"),
+      supabase.from("viviendas").select("id, etiqueta"),
+      supabase.from("perfiles").select("id, nombre, apellidos"),
+    ]);
+
+  const etiquetas: Record<string, string> = {};
+  for (const v of viviendas ?? []) etiquetas[v.id] = v.etiqueta;
+  const nombres: Record<string, string> = {};
+  for (const p of perfiles ?? []) nombres[p.id] = nombreCorto(p.nombre, p.apellidos);
 
   return (
     <div className="flex h-full flex-col">
@@ -34,6 +42,9 @@ export default async function Page() {
           reservas={reservas ?? []}
           mantenimiento={mant ?? []}
           miVivienda={session!.perfil!.vivienda_id ?? ""}
+          etiquetas={etiquetas}
+          nombres={nombres}
+          verNombres
           hoy={hoy}
         />
       </div>

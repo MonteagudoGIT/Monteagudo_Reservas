@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { formatoEuros } from "@/lib/reservas";
+import { formatoEuros, nombreCorto } from "@/lib/reservas";
 
 const MODO_LABEL: Record<string, string> = { sala: "Sala", ping_pong: "Ping Pong" };
 
@@ -27,25 +27,33 @@ export default async function Home() {
   const perfil = session!.perfil!;
   const t = await getTranslations("home");
 
-  const [{ data: proximas }, { data: saldo }, { data: avisos }] = await Promise.all([
-    supabase
-      .from("reservas")
-      .select("id, modo, inicio, fin, estado, aprobacion")
-      .eq("vivienda_id", perfil.vivienda_id!)
-      .in("estado", ["retenida", "confirmada"])
-      .gte("inicio", new Date().toISOString())
-      .order("inicio", { ascending: true })
-      .limit(5),
-    supabase.rpc("saldo_vivienda", { p_vivienda: perfil.vivienda_id }),
-    supabase
-      .from("avisos")
-      .select("id, titulo, cuerpo, publicado_en")
-      .eq("publicado", true)
-      .order("publicado_en", { ascending: false })
-      .limit(2),
-  ]);
+  const [{ data: proximas }, { data: saldo }, { data: avisos }, { data: vivienda }, { data: convivientes }] =
+    await Promise.all([
+      supabase
+        .from("reservas")
+        .select("id, modo, inicio, fin, estado, aprobacion, usuario_id")
+        .eq("vivienda_id", perfil.vivienda_id!)
+        .in("estado", ["retenida", "confirmada"])
+        .gte("inicio", new Date().toISOString())
+        .order("inicio", { ascending: true })
+        .limit(5),
+      supabase.rpc("saldo_vivienda", { p_vivienda: perfil.vivienda_id }),
+      supabase
+        .from("avisos")
+        .select("id, titulo, cuerpo, publicado_en")
+        .eq("publicado", true)
+        .order("publicado_en", { ascending: false })
+        .limit(2),
+      supabase.from("viviendas").select("etiqueta").eq("id", perfil.vivienda_id!).maybeSingle(),
+      supabase.from("perfiles").select("id, nombre, apellidos").eq("vivienda_id", perfil.vivienda_id!),
+    ]);
 
   const reservas = proximas ?? [];
+  const piso = vivienda?.etiqueta ?? "";
+  const nombres: Record<string, string> = {};
+  for (const p of convivientes ?? []) nombres[p.id] = nombreCorto(p.nombre, p.apellidos);
+  const quien = (uid: string | null) =>
+    [piso, uid ? nombres[uid] : ""].filter(Boolean).join(" · ");
 
   return (
     <main className="flex h-full flex-col">
@@ -115,6 +123,9 @@ export default async function Home() {
                 <div className="text-sm text-ink-2">
                   {fechaLarga(r.inicio)} · {rango(r.inicio, r.fin)}
                 </div>
+                {quien(r.usuario_id) ? (
+                  <div className="mt-0.5 text-xs text-ink-3">{quien(r.usuario_id)}</div>
+                ) : null}
                 <div className="mt-2 text-xs font-semibold text-accent-ink">
                   {r.aprobacion === "pendiente"
                     ? t("st_pendiente_aprobacion")

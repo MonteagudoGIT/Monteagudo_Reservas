@@ -46,6 +46,14 @@ export function horarioValido(modo: Modo, hi: number, hf: number): boolean {
   return true;
 }
 
+/** "Nombre A." a partir de nombre y apellidos. */
+export function nombreCorto(nombre?: string | null, apellidos?: string | null): string {
+  const n = (nombre ?? "").trim();
+  const a = (apellidos ?? "").trim();
+  if (!n && !a) return "";
+  return a ? `${n} ${a[0]}.` : n;
+}
+
 export function formatoEuros(cent: number): string {
   return (cent / 100).toLocaleString("es-ES", {
     style: "currency",
