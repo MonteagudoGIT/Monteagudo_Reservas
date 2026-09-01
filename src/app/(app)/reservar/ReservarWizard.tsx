@@ -448,31 +448,31 @@ export default function ReservarWizard({
           <input type="hidden" name="hi" value={hi} />
           <input type="hidden" name="hf" value={hf} />
 
-          <div className="flex-1 space-y-4 overflow-y-auto px-5 py-4">
-            <div className="rounded-2xl border border-line bg-surface p-4 text-sm">
+          <div className="flex-1 space-y-3 overflow-y-auto px-5 py-3">
+            <div className="rounded-2xl border border-line bg-surface p-3.5 text-xs">
               <Row k={t("space")} v={tSpace(modo)} />
               <Row k={t("day")} v={nombreDiaLargo(fecha, loc)} cap />
               <Row k={t("time")} v={`${String(hi).padStart(2, "0")}:00 – ${String(hf).padStart(2, "0")}:00`} />
               <Row k={t("home")} v={`${vivienda} · ${nombre}`} />
-              <div className="my-3 border-t border-line" />
+              <div className="my-2 border-t border-line" />
               <div className="flex items-center justify-between">
                 <span className="font-semibold">{t("total")}</span>
-                <span className="font-mono text-lg font-semibold">{formatoEuros(precio)}</span>
+                <span className="font-mono text-base font-semibold">{formatoEuros(precio)}</span>
               </div>
             </div>
 
             {state.error ? <Alert>{state.error}</Alert> : null}
 
             <div className="text-xs font-semibold uppercase tracking-[.06em] text-ink-3">{t("howToPay")}</div>
-            <label className="flex items-start gap-3 rounded-xl border border-line bg-surface p-3.5">
-              <input type="radio" name="metodo" value="transferencia" defaultChecked className="mt-1 size-4" style={{ accentColor: "var(--accent)" }} />
+            <label className="flex items-start gap-3 rounded-xl border border-line bg-surface p-3">
+              <input type="radio" name="metodo" value="transferencia" defaultChecked className="mt-0.5 size-4" style={{ accentColor: "var(--accent)" }} />
               <span className="text-sm">
                 <span className="font-semibold">{t("transfer")}</span>
                 <span className="block text-xs text-ink-2">{t("transferHint")}</span>
               </span>
             </label>
-            <label className={"flex items-start gap-3 rounded-xl border border-line bg-surface p-3.5 " + (saldoAlcanza ? "" : "opacity-60")}>
-              <input type="radio" name="metodo" value="saldo" disabled={!saldoAlcanza} className="mt-1 size-4" style={{ accentColor: "var(--accent)" }} />
+            <label className={"flex items-start gap-3 rounded-xl border border-line bg-surface p-3 " + (saldoAlcanza ? "" : "opacity-60")}>
+              <input type="radio" name="metodo" value="saldo" disabled={!saldoAlcanza} className="mt-0.5 size-4" style={{ accentColor: "var(--accent)" }} />
               <span className="text-sm">
                 <span className="font-semibold">{t("balance")}</span>
                 <span className="block text-xs text-ink-2">
@@ -508,9 +508,9 @@ function StepBtn({ children, onClick, disabled }: { children: React.ReactNode; o
 
 function Row({ k, v, cap }: { k: string; v: string; cap?: boolean }) {
   return (
-    <div className="mt-2 flex justify-between first:mt-0">
-      <span className="text-ink-2">{k}</span>
-      <span className={"font-semibold " + (cap ? "capitalize" : "")}>{v}</span>
+    <div className="mt-1.5 flex justify-between gap-3 first:mt-0">
+      <span className="shrink-0 text-ink-2">{k}</span>
+      <span className={"text-right font-semibold " + (cap ? "capitalize" : "")}>{v}</span>
     </div>
   );
 }
