@@ -35,7 +35,7 @@ export default async function AdminPanel() {
     { href: "/admin/mantenimiento", t: "Mantenimiento", d: "Cerrar tramos" },
     { href: "/admin/avisos", t: "Avisos", d: "Comunicados a los vecinos" },
     { href: "/admin/sugerencias", t: "Buzón de sugerencias", d: "Lo que dicen los vecinos" },
-    { href: "/admin/calendario", t: "Calendario global", d: "Ver toda la ocupación" },
+    { href: "/calendario", t: "Calendario global", d: "Ver toda la ocupación (con piso y nombre)" },
   ];
 
   return (

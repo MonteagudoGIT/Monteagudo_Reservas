@@ -5,15 +5,9 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Alert } from "@/components/ui";
 
+/** El enlace al Panel vive ahora en la cabecera fija de administración (siempre visible). */
 export function VolverPanel() {
-  return (
-    <Link href="/admin" className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-accent-ink">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-        <path d="M15 5l-7 7 7 7" />
-      </svg>
-      Panel
-    </Link>
-  );
+  return null;
 }
 
 /** Botón que ejecuta una server action (id) y refresca. */

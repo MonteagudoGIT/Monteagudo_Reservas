@@ -18,6 +18,11 @@ export default async function Page() {
   const hasta = addDaysISO(hoy, 45);
 
   const miVivienda = session!.perfil!.vivienda_id ?? "";
+  const esAdmin = session!.perfil!.rol === "admin";
+
+  const perfilesQuery = esAdmin
+    ? supabase.from("perfiles").select("id, nombre, apellidos")
+    : supabase.from("perfiles").select("id, nombre, apellidos").eq("vivienda_id", miVivienda);
 
   const [{ data: reservas }, { data: mant }, { data: viviendas }, { data: convivientes }] =
     await Promise.all([
@@ -30,7 +35,7 @@ export default async function Page() {
         .neq("aprobacion", "rechazada"),
       supabase.from("bloqueos_mantenimiento").select("inicio, fin, motivo"),
       supabase.from("viviendas").select("id, etiqueta"),
-      supabase.from("perfiles").select("id, nombre, apellidos").eq("vivienda_id", miVivienda),
+      perfilesQuery,
     ]);
 
   const etiquetas: Record<string, string> = {};
@@ -48,6 +53,7 @@ export default async function Page() {
       miVivienda={miVivienda}
       etiquetas={etiquetas}
       nombres={nombres}
+      verNombres={esAdmin}
       hoy={hoy}
     />
   );

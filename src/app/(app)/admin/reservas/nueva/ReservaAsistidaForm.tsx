@@ -20,7 +20,7 @@ export default function ReservaAsistidaForm({
   const dias = diasReservables();
 
   return (
-    <form action={action} className="flex flex-col gap-4">
+    <form action={action} className="flex flex-col gap-3">
       {state.error ? <Alert>{state.error}</Alert> : null}
 
       <Field label="Vivienda" htmlFor="vivienda_id">
@@ -37,7 +37,7 @@ export default function ReservaAsistidaForm({
         </Select>
       </Field>
 
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1">
         <span className="text-xs font-semibold text-ink-2">Uso</span>
         <div className="flex gap-2">
           {[
@@ -47,7 +47,7 @@ export default function ReservaAsistidaForm({
             <label
               key={v}
               className={
-                "flex-1 cursor-pointer rounded-xl border px-3 py-2.5 text-center text-sm font-semibold " +
+                "flex-1 cursor-pointer rounded-xl border px-3 py-2 text-center text-sm font-semibold " +
                 (modo === v ? "border-2 border-accent bg-accent-soft" : "border-line bg-surface")
               }
             >
@@ -107,11 +107,11 @@ export default function ReservaAsistidaForm({
           </Select>
         </Field>
       </div>
-      <p className="-mt-2 text-xs text-ink-3">
-        Horario 10–15 y 17–23 (siesta cerrada). Ping Pong máximo 2 h.
+      <p className="-mt-1.5 text-xs text-ink-3">
+        Horario 10–15 y 17–23 (siesta cerrada). Ping Pong máx. 2 h.
       </p>
 
-      <SubmitButton className="mt-2">Crear reserva</SubmitButton>
+      <SubmitButton className="mt-1">Crear reserva</SubmitButton>
     </form>
   );
 }

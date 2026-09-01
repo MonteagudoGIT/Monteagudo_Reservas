@@ -14,10 +14,9 @@ export default async function Page() {
       <VolverPanel />
       <h1 className="text-xl font-semibold">Nueva reserva asistida</h1>
       <p className="mt-1 text-sm text-ink-2">
-        Reserva a nombre de una vivienda. Queda confirmada y marcada como pagada (gestión del
-        administrador).
+        A nombre de una vivienda. Queda confirmada y dada por pagada.
       </p>
-      <div className="mt-4">
+      <div className="mt-3">
         <ReservaAsistidaForm viviendas={viviendas ?? []} />
       </div>
     </div>
