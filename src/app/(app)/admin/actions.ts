@@ -1,5 +1,6 @@
 "use server";
 
+import { after } from "next/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -208,13 +209,26 @@ export async function crearAvisoAction(_p: FS, fd: FormData): Promise<FS> {
   const cuerpo = String(fd.get("cuerpo") ?? "").trim();
   if (titulo.length < 2 || cuerpo.length < 2) return { error: "El título y el texto son obligatorios." };
   const publicar = fd.get("publicar") === "on";
-  const { error } = await s.from("avisos").insert({
-    titulo,
-    cuerpo,
-    publicado: publicar,
-    publicado_en: publicar ? new Date().toISOString() : null,
-  });
+  const enviarCorreo = publicar && fd.get("enviar_email") === "on";
+
+  const { data: nuevo, error } = await s
+    .from("avisos")
+    .insert({
+      titulo,
+      cuerpo,
+      publicado: publicar,
+      publicado_en: publicar ? new Date().toISOString() : null,
+      enviar_email: enviarCorreo,
+    })
+    .select("id")
+    .single();
   if (error) return { error: "No se ha podido crear el aviso." };
+
+  if (enviarCorreo && nuevo) {
+    const { enviarAviso } = await import("@/lib/avisos-mail");
+    after(() => enviarAviso(nuevo.id as string));
+  }
+
   revalidatePath("/admin/avisos");
   revalidatePath("/");
   redirect("/admin/avisos");

@@ -23,6 +23,15 @@ export default function AvisoForm() {
         <input type="checkbox" name="publicar" defaultChecked className="size-4" style={{ accentColor: "var(--accent)" }} />
         Publicar ya (visible para los vecinos)
       </label>
+      <label className="flex items-start gap-2 text-sm text-ink-2">
+        <input type="checkbox" name="enviar_email" className="mt-0.5 size-4" style={{ accentColor: "var(--accent)" }} />
+        <span>
+          Enviar también por correo a los vecinos
+          <span className="block text-xs text-ink-3">
+            Solo si se publica. Tarda ~1 min y algunos pueden llegar a spam.
+          </span>
+        </span>
+      </label>
       <SubmitButton>Crear aviso</SubmitButton>
     </form>
   );

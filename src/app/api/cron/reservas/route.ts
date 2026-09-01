@@ -117,12 +117,31 @@ ${restantes === 0 ? "Caduca hoy si no se valida." : `Caduca en ${restantes} día
     }
   }
 
+  // Red de seguridad: avisos publicados marcados para envío que aún no han salido.
+  let avisosEnviados = 0;
+  if (mailConfigurado) {
+    const { data: avisosPend } = await supabase
+      .from("avisos")
+      .select("id")
+      .eq("publicado", true)
+      .eq("enviar_email", true)
+      .is("email_enviado_en", null);
+    if (avisosPend && avisosPend.length > 0) {
+      const { enviarAviso } = await import("@/lib/avisos-mail");
+      for (const a of avisosPend) {
+        const res = await enviarAviso(a.id as string);
+        avisosEnviados += res.enviados;
+      }
+    }
+  }
+
   return NextResponse.json({
     ok: true,
     caducadas,
     completadas,
     pendientes: pendientes?.length ?? 0,
     avisos,
+    avisosEnviados,
     mail: mailConfigurado,
   });
 }
