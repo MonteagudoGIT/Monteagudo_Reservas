@@ -15,8 +15,11 @@ export default function LoginForm() {
   const [state, action] = useActionState(loginAction, initial);
 
   return (
-    <form action={action} className="flex flex-col gap-3">
-      <h1 className="text-2xl font-semibold">{t("title")}</h1>
+    <form action={action} className="flex flex-col gap-4">
+      <div>
+        <h1 className="text-2xl font-semibold">{t("title")}</h1>
+        <p className="mt-1 text-sm text-ink-2">{t("subtitle")}</p>
+      </div>
 
       {state.error ? <Alert>{state.error}</Alert> : null}
 
@@ -43,20 +46,20 @@ export default function LoginForm() {
         />
       </Field>
 
-      <div className="flex items-center justify-between gap-3">
-        <label className="flex items-center gap-2 text-xs text-ink-2">
+      <div className="flex items-center justify-between">
+        <label className="flex items-center gap-2 text-sm text-ink-2">
           <input
             type="checkbox"
             name="remember"
             defaultChecked
-            className="size-4 shrink-0"
+            className="size-4"
             style={{ accentColor: "var(--accent)" }}
           />
           {t("remember")}
         </label>
         <Link
           href="/recuperar"
-          className="shrink-0 text-xs font-semibold text-accent-ink"
+          className="text-sm font-semibold text-accent-ink"
         >
           {t("forgot")}
         </Link>

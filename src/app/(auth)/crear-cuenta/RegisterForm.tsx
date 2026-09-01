@@ -17,7 +17,7 @@ export default function RegisterForm({ viviendas }: { viviendas: Vivienda[] }) {
   const [state, action] = useActionState(registerAction, initial);
 
   return (
-    <form action={action} className="flex h-full flex-col">
+    <form action={action} className="mx-auto flex h-full w-full max-w-md flex-col">
       <header className="flex shrink-0 items-center gap-2 px-5 pb-3 pt-5">
         <Link
           href="/entrar"
