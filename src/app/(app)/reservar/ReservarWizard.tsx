@@ -301,7 +301,7 @@ export default function ReservarWizard({
                         setPorHoras(false);
                       }}
                       className={
-                        "flex flex-1 flex-col items-center rounded-lg border px-2 py-1.5 text-xs font-semibold " +
+                        "flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-2 py-1.5 text-xs font-semibold leading-none " +
                         (activa
                           ? "border-accent bg-accent-soft"
                           : ok
@@ -309,8 +309,8 @@ export default function ReservarWizard({
                             : "border-line bg-surface-2 text-ink-3")
                       }
                     >
-                      {label}
-                      <span className="text-[0.65rem] font-normal text-ink-3">
+                      <span>{label}</span>
+                      <span className="text-[0.62rem] font-normal text-ink-3">
                         {ok ? `${f.inicio}–${f.fin}` : t("busy")}
                       </span>
                     </button>
