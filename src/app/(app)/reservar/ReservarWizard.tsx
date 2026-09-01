@@ -230,7 +230,7 @@ export default function ReservarWizard({
                   <path d="M15 5l-7 7 7 7" />
                 </svg>
               </button>
-              <span className="text-sm font-semibold capitalize">{mesLargo}</span>
+              <span className="text-sm font-semibold first-letter:uppercase">{mesLargo}</span>
               <button
                 onClick={() => setMesRef(sumarMeses(mesRef, 1))}
                 disabled={!puedeNext}
