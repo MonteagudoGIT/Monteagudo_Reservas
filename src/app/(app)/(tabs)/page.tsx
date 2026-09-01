@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 import { getSessionUser } from "@/lib/auth";
@@ -50,10 +51,13 @@ export default async function Home() {
       <header className="shrink-0 px-5 pb-3 pt-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="1.8" aria-hidden>
-              <path d="M5 21V10a7 7 0 0 1 14 0v11" />
-              <path d="M3 21h18" />
-            </svg>
+            <Image
+              src="/monteagudo-mark.png"
+              alt=""
+              width={20}
+              height={20}
+              className="h-5 w-5"
+            />
             <span className="font-semibold tracking-tight">Monteagudo</span>
           </div>
           <LanguageSwitcher />
