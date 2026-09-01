@@ -41,7 +41,8 @@
       "accept": "Acepto la política de privacidad y las condiciones de uso.",
       "submit": "Crear cuenta",
       "haveAccount": "¿Ya tienes cuenta?",
-      "login": "Entrar"
+      "login": "Entrar",
+      "back": "Volver"
     },
     "verify": {
       "title": "Revisa tu correo",

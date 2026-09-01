@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import ResendButton from "./ResendButton";
+import AuthCentered from "@/components/AuthCentered";
 
 export default async function Page({
   searchParams,
@@ -11,6 +12,7 @@ export default async function Page({
   const t = await getTranslations("auth.verify");
 
   return (
+    <AuthCentered>
     <div className="flex flex-col items-center gap-4 text-center">
       <span className="flex size-16 items-center justify-center rounded-full bg-accent-soft">
         <svg
@@ -49,5 +51,6 @@ export default async function Page({
         ← Entrar
       </Link>
     </div>
+    </AuthCentered>
   );
 }

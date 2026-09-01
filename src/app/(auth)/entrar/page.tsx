@@ -1,5 +1,10 @@
 import LoginForm from "./LoginForm";
+import AuthCentered from "@/components/AuthCentered";
 
 export default function Page() {
-  return <LoginForm />;
+  return (
+    <AuthCentered>
+      <LoginForm />
+    </AuthCentered>
+  );
 }

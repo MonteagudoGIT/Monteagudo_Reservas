@@ -41,7 +41,8 @@
       "accept": "I accept the privacy policy and the terms of use.",
       "submit": "Create account",
       "haveAccount": "Already have an account?",
-      "login": "Sign in"
+      "login": "Sign in",
+      "back": "Back"
     },
     "verify": {
       "title": "Check your email",
